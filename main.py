@@ -6,6 +6,12 @@ import time
 
 debug = True
 
+pygame.init()
+SCREEN_WIDTH = 960
+SCREEN_HEIGHT = 720
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), 0, 32)
+clock = pygame.time.Clock()
+
 
 class Stage:  # This class is used for stuff that I need to easily adapt SNAP! code
     bg = pygame.image.load('Background.png')
@@ -47,7 +53,7 @@ class Player:  # This class is used for the player
         self.img = pygame.transform.rotate(self.Idle, self.angle)
 
         # Masks
-        temp = pygame.image.load('Lander.png')
+        temp = pygame.image.load('Lander.png').convert_alpha()
         self.lander_img = pygame.transform.rotate(temp, self.angle)
         self.mask = pygame.mask.from_surface(self.lander_img, 300)
 
@@ -71,7 +77,7 @@ class Player:  # This class is used for the player
 
     def draw(self):
         # Images
-        temp = pygame.image.load('Lander.png')
+        temp = pygame.image.load('Lander.png').convert_alpha()
         self.lander_img = pygame.transform.rotate(temp, self.angle)
 
         # Mask
@@ -127,12 +133,12 @@ class Player:  # This class is used for the player
 
 class Stars:  # This class is used for the background tiles
     StarList = []  # Objects are added to this list
-    test_img = pygame.image.load('BG/BG1.png')  # This variable is used for get_width and get_height
+    test_img = pygame.image.load('BG/BG1.png').convert_alpha()  # This variable is used for get_width and get_height
 
     @classmethod
     def randomBG(cls):
         # Returns one of the random images for the Background
-        return pygame.image.load(f'BG/BG{random.randint(1, 3)}.png')
+        return pygame.image.load(f'BG/BG{random.randint(1, 3)}.png').convert_alpha()
 
     @classmethod
     def draw(cls):
@@ -184,7 +190,7 @@ class Stars:  # This class is used for the background tiles
 class MouseTrail:  # This class is for debugging
     def __init__(self):
         self.positions = []
-        self.img = pygame.image.load('Heart.png')
+        self.img = pygame.image.load('Heart.png').convert_alpha()
 
     def Check(self):
         if pygame.mouse.get_pressed(3)[0]:
@@ -268,15 +274,9 @@ class Planet:  # This class is used for Planets of all kind
 
         # init
         self.position = (x - Stage.XScroll, y - Stage.YScroll)
-        self.img = pygame.image.load('Planets/Planet1.png')
+        self.img = pygame.image.load('Planets/Planet1.png').convert_alpha()
         self.mask = pygame.mask.from_surface(self.img)
 
-
-pygame.init()
-SCREEN_WIDTH = 960
-SCREEN_HEIGHT = 720
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), 0, 32)
-clock = pygame.time.Clock()
 
 surface = pygame.Surface(screen.get_size())
 bg_color = pygame.Color('black')
