@@ -14,7 +14,7 @@ clock = pygame.time.Clock()
 
 
 class Stage:  # This class is used for stuff that I need to easily adapt SNAP! code
-    bg = pygame.image.load('Background.png')
+    bg = pygame.image.load('Background.png').convert_alpha()
     XScroll = 0
     YScroll = 0
 
@@ -36,67 +36,54 @@ class Stage:  # This class is used for stuff that I need to easily adapt SNAP! c
                         Planet.PlanetList[0].mass *= 2
 
 
-class Player:  # This class is used for the player
-
+class Player(pygame.sprite.Sprite):  # This class is used for the player
     def __init__(self):
-        # Positions
-        self.position = (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+        super().__init__()
+        # Set angle
         self.angle = 0
+
+        # Store Image
+        self.Idle = pygame.image.load('Ship.png').convert()
+        self.Idle.set_colorkey((0, 0, 0))
+
+        # Call Stored Image
+        self.image = pygame.transform.rotate(self.Idle, self.angle)
+        self.rect = self.image.get_rect()
+
+        # Positions
+        self.rect.center = (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
         # Forces
         self.XF = 0
         self.YF = 0
 
-        # Images
-        self.Idle = pygame.image.load('Ship.png').convert()
-        self.Idle.set_colorkey((0, 0, 0))
-        self.img = pygame.transform.rotate(self.Idle, self.angle)
-
         # Masks
-        temp = pygame.image.load('Lander.png').convert_alpha()
-        self.lander_img = pygame.transform.rotate(temp, self.angle)
-        self.mask = pygame.mask.from_surface(self.lander_img, 300)
+        self.lander_img = pygame.image.load('Lander.png').convert_alpha()
+        self.mask = pygame.mask.from_surface(self.lander_img)
 
         # Planet caching
         self.Current_Planet = None
 
-        # Centered Rotation
-        self.cpos = (
-            self.position[0] - int(self.img.get_width() / 2), self.position[1] - int(self.img.get_height() / 2))
-
-    def HandleInput(self):
+    def update(self):
+        # Key Input
         keys = pygame.key.get_pressed()
-        # Rotation
         if keys[pygame.K_a]:
             self.rotate(5)
         if keys[pygame.K_d]:
             self.rotate(-5)
-        # Movement
         if keys[pygame.K_SPACE]:
             self.accelerate()
 
-    def draw(self):
-        # Images
-        temp = pygame.image.load('Lander.png').convert_alpha()
-        self.lander_img = pygame.transform.rotate(temp, self.angle)
+        # Move Player and Apply Forces
+        self.move()
 
-        # Mask
-        self.mask = pygame.mask.from_surface(self.lander_img)
-
-        # Centred Rotation
-        self.cpos = (
-            self.position[0] - int(self.img.get_width() / 2), self.position[1] - int(self.img.get_height() / 2))
-
-        # Draw Mask
-        if debug:
-            olist = self.mask.outline()
-            image = pygame.Surface([640, 480], pygame.SRCALPHA, 32)
-            image = image.convert_alpha()
-            pygame.draw.lines(image, (200, 150, 150), True, olist)
-            screen.blit(image, self.cpos)
-
-        # Draw Image
-        screen.blit(self.img, self.cpos)
+        # Release from Planet
+        if self.Current_Planet:
+            # Set var to None if no longer touching the planet
+            offset_x = play.rect.center[0] - self.Current_Planet.position[0]
+            offset_y = play.rect.center[1] - self.Current_Planet.position[1]
+            if not self.Current_Planet.mask.overlap(play.mask, (offset_x, offset_y)):  # If colliding with Planet
+                self.Current_Planet = None
 
     def move(self):
         if self.Current_Planet:
@@ -110,25 +97,29 @@ class Player:  # This class is used for the player
         Stage.XScroll += self.XF
         Stage.YScroll += self.YF
 
+    def draw_mask(self):
+        olist = self.mask.outline()
+        img = pygame.Surface([640, 480], pygame.SRCALPHA, 32)
+        img = img.convert_alpha()
+        pygame.draw.lines(img, (200, 150, 150), True, olist)
+        screen.blit(img, (self.rect.x, self.rect.y))
+        # screen.blit(self.lander_img, self.rect.center)
+
     def rotate(self, r):
         # change the rotation value and render a new img
         self.angle += r
-        self.img = pygame.transform.rotate(self.Idle, self.angle)
+        self.image = pygame.transform.rotate(self.Idle, self.angle)
+        self.rect = self.image.get_rect()
+        self.rect.center = (SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+        temp = pygame.image.load('Lander.png').convert_alpha()
+        self.lander_img = pygame.transform.rotate(temp, self.angle)
+        self.mask = pygame.mask.from_surface(self.lander_img)
 
     def accelerate(self):
         # Convert is needed because math.sin and math.cos work in radian instead of degrees
         convert = 360 / (2 * math.pi)
         self.XF += math.cos(self.angle / convert) * 0.1
         self.YF -= math.sin(self.angle / convert) * 0.1
-
-    def Touch(self):
-        # Setup for Mask collision test
-        if self.Current_Planet:
-            # Set var to None if no longer touching the planet
-            offset_x = play.cpos[0] - self.Current_Planet.position[0]
-            offset_y = play.cpos[1] - self.Current_Planet.position[1]
-            if not self.Current_Planet.mask.overlap(play.mask, (offset_x, offset_y)):  # If colliding with Planet
-                self.Current_Planet = None
 
 
 class Stars:  # This class is used for the background tiles
@@ -248,8 +239,8 @@ class Planet:  # This class is used for Planets of all kind
     def Touch(cls):
         for planet in cls.PlanetList:
             # Setup for Mask collision test
-            offset_x = play.cpos[0] - planet.position[0]
-            offset_y = play.cpos[1] - planet.position[1]
+            offset_x = play.rect.x - planet.position[0]
+            offset_y = play.rect.y - planet.position[1]
             if planet.mask.overlap(play.mask, (offset_x, offset_y)):  # If colliding with Planet
                 if play.Current_Planet != planet:
                     play.Current_Planet = planet
@@ -282,6 +273,8 @@ surface = pygame.Surface(screen.get_size())
 bg_color = pygame.Color('black')
 
 play = Player()  # Create player
+player_group = pygame.sprite.GroupSingle()
+player_group.add(play)
 
 MT = MouseTrail()  # Create Mouse trail object for debugging
 
@@ -301,16 +294,14 @@ while True:
     # Events
     Stage.HandleKeys()  # Check if game quit or Keys were pressed
     MT.Check()  # Check if mouse button is down
-    play.HandleInput()  # Check for inputs for turing and thrust
-    play.move()  # Move the Scroll values by current X and Y Forces
-    play.Touch()  # This checks if the player is still touching a planet
+    player_group.update()
     Planet.Touch()  # This checks if the player is touching any planet
 
     # Visual
     screen.fill(bg_color)  # Fill the 'screen' surface with a solid color
     Stars.draw()  # Draw the Stars and update their position
     Planet.draw()  # Draw the Player
-    play.draw()  # Draw Player onto surface
+    player_group.draw(screen)
     MT.draw()  # Draw all Saved positions
 
     # Text
