@@ -33,13 +33,12 @@ class Stars:  # This class is used for the background tiles
     @classmethod
     def addstars(cls):
         # This will create and 4 objects with the correct starting points for a flawless background
-        for i in [(stage.SCREEN_WIDTH / 2 - cls.test_img.get_width() / 2, stage.SCREEN_HEIGHT / 2 - cls.test_img.get_height() / 2),
-                  (
-                          stage.SCREEN_WIDTH / 2 - cls.test_img.get_width() * 1.5,
-                          stage.SCREEN_HEIGHT / 2 - cls.test_img.get_height() / 2),
-                  (
-                          stage.SCREEN_WIDTH / 2 - cls.test_img.get_width() / 2,
-                          stage.SCREEN_HEIGHT / 2 - cls.test_img.get_height() * 1.5),
+        for i in [(stage.SCREEN_WIDTH / 2 - cls.test_img.get_width() / 2,
+                   stage.SCREEN_HEIGHT / 2 - cls.test_img.get_height() / 2),
+                  (stage.SCREEN_WIDTH / 2 - cls.test_img.get_width() * 1.5,
+                   stage.SCREEN_HEIGHT / 2 - cls.test_img.get_height() / 2),
+                  (stage.SCREEN_WIDTH / 2 - cls.test_img.get_width() / 2,
+                   stage.SCREEN_HEIGHT / 2 - cls.test_img.get_height() * 1.5),
                   (stage.SCREEN_WIDTH / 2 - cls.test_img.get_width() * 1.5,
                    stage.SCREEN_HEIGHT / 2 - cls.test_img.get_height() * 1.5)]:
             cls.StarList.append(Stars(i[0], i[1]))
@@ -117,6 +116,7 @@ while True:
     planet_group.draw(stage.screen)  # Draw the Player
     player_group.draw(stage.screen)
     MT.draw()  # Draw all Saved positions
+    play.draw_mask_attach()
 
     # Text
     text = myfont.render(f"{play.offset}", True, (255, 255, 0))

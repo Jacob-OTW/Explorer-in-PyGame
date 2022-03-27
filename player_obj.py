@@ -46,26 +46,21 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
         if self.Current_Planet:
             keyboard = pygame.key.get_pressed()
             if not keyboard[pygame.K_SPACE]:
-                b = pygame.math.Vector2((self.rect.x - self.Current_Planet.rect.x, self.rect.y - self.Current_Planet.rect.y))
-                t = self.offset - b
-                stage.change_scroll(t)
                 self.XF, self.YF = self.Current_Planet.XF, self.Current_Planet.YF
             # Set var to None if no longer touching the planet
-            offset_x = play.rect.center[0] - self.Current_Planet.position[0]
-            offset_y = play.rect.center[1] - self.Current_Planet.position[1]
-            if not self.Current_Planet.mask.overlap(play.mask, (offset_x, offset_y)):  # If colliding with Planet
+
+            offset = (play.rect.x - self.Current_Planet.rect.x, play.rect.y - self.Current_Planet.rect.y)
+            if not self.Current_Planet.mask.overlap(play.mask, offset):  # If colliding with Planet
                 self.Current_Planet = None
 
         # Move game world
         stage.change_scroll((self.XF, self.YF))
 
-    def draw_mask(self):
+    def draw_mask_attach(self):
         olist = self.mask.outline()
-        img = pygame.Surface([640, 480], pygame.SRCALPHA, 32)
-        img = img.convert_alpha()
+        img = pygame.Surface([640, 480], pygame.SRCALPHA, 32).convert_alpha()
         pygame.draw.lines(img, (200, 150, 150), True, olist)
         stage.screen.blit(img, (self.rect.x, self.rect.y))
-        # screen.blit(self.lander_img, self.rect.center)
 
     def rotate(self, r):
         # change the rotation value and render a new img
@@ -73,11 +68,8 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
         self.image = pygame.transform.rotate(self.Idle, self.angle)
         self.rect = self.image.get_rect()
         self.rect.center = (stage.SCREEN_WIDTH / 2, stage.SCREEN_HEIGHT / 2)
-        temp = pygame.image.load('Assets/Lander.png').convert_alpha()
-        self.lander_img = pygame.transform.rotate(temp, self.angle)
+        self.lander_img = pygame.transform.rotate(pygame.image.load('Assets/Lander.png').convert_alpha(), self.angle)
         self.mask = pygame.mask.from_surface(self.lander_img)
-        if self.Current_Planet:
-            self.offset = (self.rect.x - self.Current_Planet.rect.x, self.rect.y - self.Current_Planet.rect.y)
 
     def accelerate(self):
         # Convert is needed because math.sin and math.cos work in radian instead of degrees
