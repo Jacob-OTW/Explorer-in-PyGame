@@ -137,13 +137,13 @@ while True:
     planet_group.draw(stage.screen)  # Draw the Player
     player_group.draw(stage.screen)
     MT.draw()  # Draw all Saved positions
-    play.draw_mask_attach()
+    # play.draw_mask_attach()
     if shop_ui.shop:
         shop_ui_group.draw(stage.screen)
     pop_up_group.draw(stage.screen)
 
     # Text
-    text = myfont.render(f"", True, (255, 255, 0))
+    text = myfont.render(f"{shop_ui.directory} {shop_ui.shop_list}", True, (255, 255, 0))
     stage.screen.blit(text, (5, 10))
     text2 = myfont.render(f"{round(frame_time * 1000)}ms", True, (255, 255, 0))
     stage.screen.blit(text2, (5, 25))

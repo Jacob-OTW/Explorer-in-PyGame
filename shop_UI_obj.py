@@ -62,14 +62,13 @@ class Shop_UI(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.max_shop_length = 7  # Max amount of fields (n+1)
-        self.image = pygame.Surface((200, (self.max_shop_length + 1) * 52))  # Create Surface
-        self.image.fill('Green')  # Fill Surface
+        self.image = pygame.image.load('Assets/shop_ui.png').convert_alpha()
         self.rect = self.image.get_rect(right=stage.SCREEN_WIDTH, top=0)  # Align Surface at top-right corner
         self.shop_list = return_main_menu()  # Set the menu to main options
-        self.font = pygame.font.SysFont("monospace", 34)  # setup font for text
+        self.font = pygame.font.SysFont("bahnschrift", 34)  # setup font for text
         self.test_text = self.font.render('test text', True, (255, 255, 255))  # Used for text sizes
-        self.selector = pygame.Surface((200, self.test_text.get_height()))  # This Surface goes to the selected surface to select things in the UI
-        self.selector.fill('White')  # Fill the selector
+        self.selector = pygame.image.load(
+            'Assets/selector.png').convert_alpha()  # This Surface goes to the selected surface to select things in the UI
         self.selector_rect = self.selector.get_rect()  # Create rect for selector to move it.
         self.selected = 0  # Start value for selector
         self.directory = []  # The directory is used to figure out what the user did before the function was called
@@ -78,9 +77,8 @@ class Shop_UI(pygame.sprite.Sprite):
         self.page = 0  # Page is used for the inventory and later prob. for selling and buying
 
     def update(self):
-        self.image = pygame.Surface((200, (self.max_shop_length + 1) * 52))  # Employs Surface
-        self.image.fill('Green')  # Fill Surface
-        self.selector_rect.center = (100, self.selected * 50 + self.test_text.get_height())  # Set selector position
+        self.image = pygame.image.load('Assets/shop_ui.png').convert_alpha()
+        self.selector_rect.center = (100, self.selected * 50 + self.test_text.get_height() + 2)  # Set selector position
         self.image.blit(self.selector, self.selector_rect)  # Draw selector to Surface
         for i, item in enumerate(self.shop_list):  # Draw the Text from the shop_list
             text = self.font.render(f'{item}', True, (0, 0, 0))
@@ -88,9 +86,6 @@ class Shop_UI(pygame.sprite.Sprite):
             self.image.blit(text, text_rect)
 
     def use(self):  # Used whenever the user presses 'E'
-        if not play.Current_Planet:
-            self.shop = False
-            self.shop_list = return_main_menu()
         if self.shop:
             choice = self.shop_list[self.selected]  # Choice is the item that was just confirmed by the user
             if not self.directory:  # Main Menu
@@ -107,6 +102,10 @@ class Shop_UI(pygame.sprite.Sprite):
                     return_inventory()
                 elif choice == 'Exit':
                     self.shop = False
+            elif not play.Current_Planet:
+                self.shop = False
+                self.shop_list = return_main_menu()
+                self.directory = []
             # Extra Menus
             elif self.directory[0] == 'Buy':  # Buy Menu
                 if choice != 'Return':
@@ -146,10 +145,10 @@ class Shop_UI(pygame.sprite.Sprite):
                         return_inventory()
                 else:
                     if choice == 'Next Page':
-                        self.page += self.max_shop_length-2
+                        self.page += self.max_shop_length - 2
                         return_inventory()
                     elif choice == 'Last Page':
-                        self.page -= self.max_shop_length-2
+                        self.page -= self.max_shop_length - 2
                         if self.page < 0:
                             self.page = 0
                         return_inventory()
