@@ -58,14 +58,13 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
         if not self.Current_Planet:
             stage.change_scroll((self.XF, self.YF))
 
-    def draw_mask_attach(self):
+    def draw_mask_attach(self):  # Draws the hitbox at the bottom of player for debugging
         olist = self.mask.outline()
         img = pygame.Surface([640, 480], pygame.SRCALPHA, 32).convert_alpha()
         pygame.draw.lines(img, (200, 150, 150), True, olist)
         stage.screen.blit(img, (self.rect.x, self.rect.y))
 
-    def rotate(self, r):
-        # change the rotation value and render a new img
+    def rotate(self, r):  # change the rotation value and render a new img
         self.angle += r
         self.image = pygame.transform.rotate(self.Idle, self.angle)
         self.rect = self.image.get_rect()
@@ -73,8 +72,7 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
         self.lander_img = pygame.transform.rotate(pygame.image.load('Assets/Lander.png').convert_alpha(), self.angle)
         self.mask = pygame.mask.from_surface(self.lander_img)
 
-    def accelerate(self):
-        # Convert is needed because math.sin and math.cos work in radian instead of degrees
+    def accelerate(self):  # Convert is needed because math.sin and math.cos work in radian instead of degrees
         convert = 360 / (2 * math.pi)
         self.XF += math.cos(self.angle / convert) * 0.1
         self.YF -= math.sin(self.angle / convert) * 0.1

@@ -1,6 +1,7 @@
 import pygame
 
 
+# This file exists so there isn't a circular import
 class stage:
     pygame.init()
     SCREEN_WIDTH = 960
