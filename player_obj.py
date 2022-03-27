@@ -15,10 +15,7 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
 
         # Call Stored Image
         self.image = pygame.transform.rotate(self.Idle, self.angle)
-        self.rect = self.image.get_rect()
-
-        # Positions
-        self.rect.center = (stage.SCREEN_WIDTH / 2, stage.SCREEN_HEIGHT / 2)
+        self.rect = self.image.get_rect(center=(stage.SCREEN_WIDTH / 2, stage.SCREEN_HEIGHT / 2))
 
         # Forces
         self.XF = 0
@@ -57,7 +54,9 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
                 self.Current_Planet = None
 
         # Move game world
-        stage.change_scroll((self.XF, self.YF))
+        keyboard = pygame.key.get_pressed()
+        if not self.Current_Planet:
+            stage.change_scroll((self.XF, self.YF))
 
     def draw_mask_attach(self):
         olist = self.mask.outline()
@@ -79,6 +78,7 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
         convert = 360 / (2 * math.pi)
         self.XF += math.cos(self.angle / convert) * 0.1
         self.YF -= math.sin(self.angle / convert) * 0.1
+        self.Current_Planet = None
 
 
 play = Player()  # Create player

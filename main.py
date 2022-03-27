@@ -131,7 +131,7 @@ while True:
     planet_group.draw(stage.screen)  # Draw the Player
     player_group.draw(stage.screen)
     MT.draw()  # Draw all Saved positions
-    play.draw_mask_attach()
+    # play.draw_mask_attach()
     if shop_ui.shop:
         shop_ui_group.draw(stage.screen)
 
