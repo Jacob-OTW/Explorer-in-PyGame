@@ -17,7 +17,7 @@ def HandleKeys():
             if event.key == pygame.K_UP:
                 shop_ui.selected -= 1
                 if shop_ui.selected < 0:
-                    shop_ui.selected = 3
+                    shop_ui.selected = shop_ui.max_shop_length
             if event.key == pygame.K_DOWN:
                 shop_ui.selected += 1
                 if shop_ui.selected > len(shop_ui.shop_list) - 1:
@@ -136,7 +136,7 @@ while True:
         shop_ui_group.draw(stage.screen)
 
     # Text
-    text = myfont.render(f"{shop_ui.directory} {shop_ui.shop_list}", True, (255, 255, 0))
+    text = myfont.render(f"{shop_ui.directory} {shop_ui.shop_list} {shop_ui.page} {play.inventory}", True, (255, 255, 0))
     stage.screen.blit(text, (5, 10))
     text2 = myfont.render(f"{round(frame_time * 1000)}ms", True, (255, 255, 0))
     stage.screen.blit(text2, (5, 25))
