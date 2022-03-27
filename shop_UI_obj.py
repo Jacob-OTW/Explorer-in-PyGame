@@ -95,10 +95,11 @@ class Shop_UI(pygame.sprite.Sprite):
             elif self.directory[0] == 'Buy':  # Buy Menu
                 if self.shop_list[self.selected] != 'Return':
                     item = self.shop_list[self.selected]
-                    price = play.Current_Planet.buying[item]
-                    if play.money >= price:
-                        play.money -= price
-                        play.inventory.append(item)
+                    if item in play.Current_Planet.buying:
+                        price = play.Current_Planet.buying[item]
+                        if play.money >= price:
+                            play.money -= price
+                            play.inventory.append(item)
                 else:
                     self.directory.pop()
                     self.shop_list = return_main_menu()
@@ -137,7 +138,6 @@ class Shop_UI(pygame.sprite.Sprite):
                         if self.cached_item != '':
                             self.shop_list = ['Del', 'Return']
                             self.directory.append('Item')
-                            print(self.cached_item)
 
 
 shop_ui_group = pygame.sprite.GroupSingle()
