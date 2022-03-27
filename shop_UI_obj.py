@@ -88,6 +88,9 @@ class Shop_UI(pygame.sprite.Sprite):
             self.image.blit(text, text_rect)
 
     def use(self):  # Used whenever the user presses 'E'
+        if not play.Current_Planet:
+            self.shop = False
+            self.shop_list = return_main_menu()
         if self.shop:
             choice = self.shop_list[self.selected]  # Choice is the item that was just confirmed by the user
             if not self.directory:  # Main Menu
@@ -113,7 +116,7 @@ class Shop_UI(pygame.sprite.Sprite):
                         if play.money >= price:
                             play.money -= price
                             play.inventory.append(item)
-                            add_pop_up(f'+{item}')
+                            add_pop_up(f'+{item}', f'-{price}')
                 else:
                     self.directory.pop()
                     self.shop_list = return_main_menu()
