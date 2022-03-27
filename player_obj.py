@@ -31,6 +31,7 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
 
         # Inventory
         self.inventory = []
+        self.money = 10
 
     def update(self):
         # Key Input

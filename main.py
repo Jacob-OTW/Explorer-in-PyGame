@@ -5,7 +5,7 @@ import time
 from settings import stage
 from player_obj import player_group, play
 from planet_obj import planet_group
-from shop_UI_obj import shop_ui_group, shop_ui
+from shop_UI_obj import shop_ui_group, shop_ui, return_main_menu
 
 
 def HandleKeys():
@@ -26,6 +26,9 @@ def HandleKeys():
                 shop_ui.use()
             if event.key == pygame.K_e:
                 shop_ui.shop = True
+                shop_ui.shop_list = return_main_menu()
+            if event.key == pygame.K_t:
+                print(play.Current_Planet.status)
 
 
 class Stars:  # This class is used for the background tiles
@@ -136,7 +139,7 @@ while True:
         shop_ui_group.draw(stage.screen)
 
     # Text
-    text = myfont.render(f"{shop_ui.directory} {shop_ui.shop_list} {shop_ui.page} {play.inventory}", True, (255, 255, 0))
+    text = myfont.render(f"{play.money}", True, (255, 255, 0))
     stage.screen.blit(text, (5, 10))
     text2 = myfont.render(f"{round(frame_time * 1000)}ms", True, (255, 255, 0))
     stage.screen.blit(text2, (5, 25))

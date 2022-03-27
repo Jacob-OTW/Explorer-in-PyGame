@@ -4,20 +4,42 @@ from player_obj import play
 
 
 def return_main_menu():  # Returns main menu options
-    return ['Buy', 'Sell', 'Refuel', 'Inventory', 'Exit']
+    a = []
+    if play.Current_Planet and 'Shop' in play.Current_Planet.status:
+        a.append('Buy')
+        a.append('Sell')
+        a.append('Refuel')
+    else:
+        a.append('')
+        a.append('')
+        a.append('')
+    a.append('Inventory')
+    a.append('Exit')
+    return a
 
 
 def return_inventory():  # Returns the inventory as shop list option
     while len(shop_ui.shop_list) - 1 < shop_ui.max_shop_length:
         shop_ui.shop_list.append('')
     for i in range(shop_ui.max_shop_length - 2):
-        if i+shop_ui.page < len(play.inventory):
+        if i + shop_ui.page < len(play.inventory):
             shop_ui.shop_list[i] = play.inventory[i + shop_ui.page]
         else:
             shop_ui.shop_list[i] = ''
     shop_ui.shop_list[shop_ui.max_shop_length - 2] = 'Next Page'
     shop_ui.shop_list[shop_ui.max_shop_length - 1] = 'Last Page'
     shop_ui.shop_list[shop_ui.max_shop_length] = 'Return'
+
+
+def return_buy():
+    a = []
+    while len(a) - 1 < shop_ui.max_shop_length:
+        a.append('')
+    for i, item in enumerate(play.Current_Planet.buying):
+        if i < shop_ui.max_shop_length - 1:
+            a[i] = item
+    a[shop_ui.max_shop_length] = 'Return'
+    return a
 
 
 class Shop_UI(pygame.sprite.Sprite):
@@ -53,9 +75,7 @@ class Shop_UI(pygame.sprite.Sprite):
             if not self.directory:  # Main Menu
                 if self.shop_list[self.selected] == 'Buy':  # Buy was selected
                     self.directory.append('Buy')
-                    for i in range(self.max_shop_length):
-                        self.shop_list[i] = f'Item {i}'
-                    self.shop_list[self.max_shop_length] = 'Return'
+                    self.shop_list = return_buy()
                 elif self.shop_list[self.selected] == 'Sell':  # Sell was selected
                     self.directory.append('Sell')
                     for i in range(self.max_shop_length):
@@ -74,7 +94,11 @@ class Shop_UI(pygame.sprite.Sprite):
             # Extra Menus
             elif self.directory[0] == 'Buy':  # Buy Menu
                 if self.shop_list[self.selected] != 'Return':
-                    play.inventory.append(self.shop_list[self.selected])
+                    item = self.shop_list[self.selected]
+                    price = play.Current_Planet.buying[item]
+                    if play.money >= price:
+                        play.money -= price
+                        play.inventory.append(item)
                 else:
                     self.directory.pop()
                     self.shop_list = return_main_menu()
