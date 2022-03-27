@@ -46,9 +46,8 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
         if self.Current_Planet:
             keyboard = pygame.key.get_pressed()
             if not keyboard[pygame.K_SPACE]:
-                b = (self.rect.x - self.Current_Planet.rect.x, self.rect.y - self.Current_Planet.rect.y)
-                t = (self.offset[0] - b[0],
-                     self.offset[1] - b[1])
+                b = pygame.math.Vector2((self.rect.x - self.Current_Planet.rect.x, self.rect.y - self.Current_Planet.rect.y))
+                t = self.offset - b
                 stage.change_scroll(t)
                 self.XF, self.YF = self.Current_Planet.XF, self.Current_Planet.YF
             # Set var to None if no longer touching the planet

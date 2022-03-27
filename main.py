@@ -1,7 +1,6 @@
 import pygame
 import sys
 import random
-import math
 import time
 from settings import stage
 from player_obj import player_group, play
@@ -17,7 +16,7 @@ def HandleKeys():
 
 class Stars:  # This class is used for the background tiles
     StarList = []  # Objects are added to this list
-    test_img = pygame.image.load('Assets/BG/BG1.png').convert_alpha()  # This variable is used for get_width and get_height
+    test_img = pygame.image.load('Assets/BG/BG1.png').convert_alpha()  # Stored value for weight and height
 
     @classmethod
     def randomBG(cls):

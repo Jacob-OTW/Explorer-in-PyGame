@@ -54,7 +54,7 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
         if self.mask.overlap(play.mask, offset):  # If colliding with Planet
             if play.Current_Planet != self:
                 play.Current_Planet = self
-                play.offset = (play.rect.x - self.rect.x, play.rect.y - self.rect.y)
+                play.offset = pygame.math.Vector2((play.rect.x - self.rect.x, play.rect.y - self.rect.y))
 
 
 planet_group = pygame.sprite.Group()
