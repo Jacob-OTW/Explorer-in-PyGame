@@ -54,8 +54,7 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
             if not self.Current_Planet.mask.overlap(play.mask, offset):  # If colliding with Planet
                 self.Current_Planet = None
 
-        # Move game world
-        keyboard = pygame.key.get_pressed()
+        # Move game world if floating
         if not self.Current_Planet:
             stage.change_scroll((self.XF, self.YF))
 

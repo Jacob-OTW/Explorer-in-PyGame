@@ -15,6 +15,7 @@ def return_main_menu():  # Returns main menu options
         a.append('')
         a.append('')
     a.append('Inventory')
+    a.append('Settings')
     a.append('Exit')
     return a
 
@@ -61,31 +62,29 @@ class Shop_UI(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.max_shop_length = 7
-        self.image = pygame.Surface((200, (self.max_shop_length + 1) * 75))
+        self.image = pygame.Surface((200, (self.max_shop_length + 1) * 52))
         self.image.fill('Green')
         self.rect = self.image.get_rect(right=stage.SCREEN_WIDTH, top=0)
-        self.selector = pygame.Surface((200, 75))
+        self.shop_list = return_main_menu()
+        self.font = pygame.font.SysFont("monospace", 34)  # setup font for text
+        self.test_text = self.font.render('test text', True, (255, 255, 255))
+        self.selector = pygame.Surface((200, self.test_text.get_height()))
         self.selector.fill('White')
         self.selector_rect = self.selector.get_rect()
         self.selected = 0
-        self.shop_list = return_main_menu()
-        self.font = pygame.font.SysFont("monospace", 32)  # setup font for text
         self.directory = []
         self.cached_item = None
         self.shop = False
         self.page = 0
 
     def update(self):
-        if not play.Current_Planet:
-            self.shop = False
-            self.shop_list = return_main_menu()
-        self.image = pygame.Surface((200, (self.max_shop_length + 1) * 75))
+        self.image = pygame.Surface((200, (self.max_shop_length + 1) * 52))
         self.image.fill('Green')
-        self.selector_rect.center = (100, self.selected * 75 + 37)
+        self.selector_rect.center = (100, self.selected * 50 + self.test_text.get_height())
         self.image.blit(self.selector, self.selector_rect)
         for i, item in enumerate(self.shop_list):
             text = self.font.render(f'{item}', True, (0, 0, 0))
-            text_rect = text.get_rect(center=(100, i * 75 + text.get_height()))
+            text_rect = text.get_rect(center=(100, i * 50 + text.get_height()))
             self.image.blit(text, text_rect)
 
     def use(self):
