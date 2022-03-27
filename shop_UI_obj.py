@@ -43,10 +43,24 @@ def return_buy():
     return a
 
 
+def return_sell():
+    a = []
+    while len(a) - 1 < shop_ui.max_shop_length:
+        a.append('')
+    for i, item in enumerate(play.inventory):
+        if item not in play.Current_Planet.selling:
+            continue
+        else:
+            if i < shop_ui.max_shop_length - 1:
+                a[i] = item
+    a[shop_ui.max_shop_length] = 'Return'
+    return a
+
+
 class Shop_UI(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.max_shop_length = 4
+        self.max_shop_length = 7
         self.image = pygame.Surface((200, (self.max_shop_length + 1) * 75))
         self.image.fill('Green')
         self.rect = self.image.get_rect(right=stage.SCREEN_WIDTH, top=0)
@@ -62,6 +76,9 @@ class Shop_UI(pygame.sprite.Sprite):
         self.page = 0
 
     def update(self):
+        if not play.Current_Planet:
+            self.shop = False
+            self.shop_list = return_main_menu()
         self.image = pygame.Surface((200, (self.max_shop_length + 1) * 75))
         self.image.fill('Green')
         self.selector_rect.center = (100, self.selected * 75 + 37)
@@ -73,29 +90,25 @@ class Shop_UI(pygame.sprite.Sprite):
 
     def use(self):
         if self.shop:
+            choice = self.shop_list[self.selected]
             if not self.directory:  # Main Menu
-                if self.shop_list[self.selected] == 'Buy':  # Buy was selected
+                if choice == 'Buy':  # Buy was selected
                     self.directory.append('Buy')
                     self.shop_list = return_buy()
-                elif self.shop_list[self.selected] == 'Sell':  # Sell was selected
+                elif choice == 'Sell':  # Sell was selected
                     self.directory.append('Sell')
-                    for i in range(self.max_shop_length):
-                        if i < len(play.inventory):
-                            self.shop_list[i] = play.inventory[i]
-                        else:
-                            self.shop_list[i] = 'X'
-                    self.shop_list[self.max_shop_length] = 'Return'
-                elif self.shop_list[self.selected] == 'Refuel':
+                    self.shop_list = return_sell()
+                elif choice == 'Refuel':
                     print('You have been refueled!')
-                elif self.shop_list[self.selected] == 'Inventory':
+                elif choice == 'Inventory':
                     self.directory.append('Inventory')
                     return_inventory()
-                elif self.shop_list[self.selected] == 'Exit':
+                elif choice == 'Exit':
                     self.shop = False
             # Extra Menus
             elif self.directory[0] == 'Buy':  # Buy Menu
-                if self.shop_list[self.selected] != 'Return':
-                    item = self.shop_list[self.selected]
+                if choice != 'Return':
+                    item = choice
                     if item in play.Current_Planet.buying:
                         price = play.Current_Planet.buying[item]
                         if play.money >= price:
@@ -106,34 +119,39 @@ class Shop_UI(pygame.sprite.Sprite):
                     self.directory.pop()
                     self.shop_list = return_main_menu()
             elif self.directory[0] == 'Sell':  # Sell Menu
-                if not self.shop_list[self.selected] == 'Return':
-                    pass
+                if not choice == 'Return':
+                    if choice in play.Current_Planet.selling:
+                        play.inventory.remove(choice)
+                        play.money += play.Current_Planet.selling[choice]
+                        add_pop_up(f'-{choice}', f'+{play.Current_Planet.selling[choice]}')
+                        self.shop_list = return_sell()
                 else:
                     self.directory.pop()
                     self.shop_list = return_main_menu()
             elif self.directory[0] == 'Inventory':
                 if len(self.directory) > 1 and self.directory[1] == 'Item':
-                    if self.cached_item == '' or self.shop_list[self.selected] == 'Return':
+                    if self.cached_item == '' or choice == 'Return':
                         self.directory.pop()
                         return_inventory()
-                    elif self.shop_list[self.selected] == 'Del':
-                        add_pop_up(f'-{self.cached_item}')
-                        play.inventory.remove(self.cached_item)
-                        self.directory.pop()
-                        return_inventory()
+                    elif choice == 'Del':
+                        if self.cached_item in play.inventory:
+                            add_pop_up(f'-{self.cached_item}')
+                            play.inventory.remove(self.cached_item)
+                            self.directory.pop()
+                            return_inventory()
                     else:
                         self.directory.pop()
                         return_inventory()
                 else:
-                    if self.shop_list[self.selected] == 'Next Page':
-                        self.page += 1
+                    if choice == 'Next Page':
+                        self.page += self.max_shop_length-2
                         return_inventory()
-                    elif self.shop_list[self.selected] == 'Last Page':
-                        self.page -= 1
+                    elif choice == 'Last Page':
+                        self.page -= self.max_shop_length-2
                         if self.page < 0:
                             self.page = 0
                         return_inventory()
-                    elif self.shop_list[self.selected] == 'Return':
+                    elif choice == 'Return':
                         self.directory.pop()
                         self.shop_list = return_main_menu()
                     else:

@@ -48,8 +48,8 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
             keyboard = pygame.key.get_pressed()
             if not keyboard[pygame.K_SPACE]:
                 self.XF, self.YF = self.Current_Planet.XF, self.Current_Planet.YF
-            # Set var to None if no longer touching the planet
 
+            # Set var to None if no longer touching the planet
             offset = (play.rect.x - self.Current_Planet.rect.x, play.rect.y - self.Current_Planet.rect.y)
             if not self.Current_Planet.mask.overlap(play.mask, offset):  # If colliding with Planet
                 self.Current_Planet = None

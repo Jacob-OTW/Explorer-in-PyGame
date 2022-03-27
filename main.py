@@ -29,7 +29,8 @@ def HandleKeys():
                 shop_ui.shop = True
                 shop_ui.shop_list = return_main_menu()
             if event.key == pygame.K_t:
-                print(play.Current_Planet.status)
+                for i in range(10):
+                    play.inventory.append(i)
 
 
 class Stars:  # This class is used for the background tiles
