@@ -5,6 +5,7 @@ import time
 from settings import stage
 from player_obj import player_group, play
 from planet_obj import planet_group
+from shop_UI_obj import shop_ui_group, shop_ui
 
 
 def HandleKeys():
@@ -12,6 +13,19 @@ def HandleKeys():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                shop_ui.selected -= 1
+                if shop_ui.selected < 0:
+                    shop_ui.selected = 3
+            if event.key == pygame.K_DOWN:
+                shop_ui.selected += 1
+                if shop_ui.selected > 3:
+                    shop_ui.selected = 0
+            if event.key == pygame.K_RETURN:
+                shop_ui.use()
+            if event.key == pygame.K_e:
+                shop_ui.shop = True
 
 
 class Stars:  # This class is used for the background tiles
@@ -109,6 +123,7 @@ while True:
     MT.Check()  # Check if mouse button is down
     player_group.update()
     planet_group.update()
+    shop_ui_group.update()
 
     # Visual
     stage.screen.fill(bg_color)  # Fill the 'screen' surface with a solid color
@@ -117,9 +132,11 @@ while True:
     player_group.draw(stage.screen)
     MT.draw()  # Draw all Saved positions
     play.draw_mask_attach()
+    if shop_ui.shop:
+        shop_ui_group.draw(stage.screen)
 
     # Text
-    text = myfont.render(f"{play.offset}", True, (255, 255, 0))
+    text = myfont.render(f"{shop_ui.directory} {shop_ui.shop_list}", True, (255, 255, 0))
     stage.screen.blit(text, (5, 10))
     text2 = myfont.render(f"{round(frame_time * 1000)}ms", True, (255, 255, 0))
     stage.screen.blit(text2, (5, 25))

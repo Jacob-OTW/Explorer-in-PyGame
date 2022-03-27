@@ -35,7 +35,7 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
     def update(self):
         if 'Static' in self.status:  # Things to do if Static
             pass
-        elif 'Moving' in self.status:  # Things to do if Moving
+        if 'Moving' in self.status:  # Things to do if Moving
             self.XF = math.cos(self.orbit_value) * self.orbit_speed
             self.YF = math.sin(self.orbit_value) * self.orbit_speed
 
@@ -43,6 +43,10 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
 
             self.startx += self.XF
             self.starty += self.YF
+        if 'Loot' in self.status:
+            if play.Current_Planet == self:
+                if self.loot not in play.inventory:
+                    play.inventory.append(self.loot)
 
         self.position = (self.startx - stage.XScroll, self.starty - stage.YScroll)  # Update Pos
         self.image = pygame.transform.scale(self.stored, (self.size, self.size))
@@ -59,4 +63,4 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
 planet_group = pygame.sprite.Group()
 planet_group.add(Planet(0, 70, status=['Static']))
 planet_group.add(Planet(0, -130, xf=8, yf=-3, mass=0.005, orbit_speed=2, size=50, costume_num=3, status=['Moving']))
-planet_group.add(Planet(0, -260, xf=8, yf=-3, mass=0.003, orbit_speed=4, size=50, costume_num=4, status=['Moving']))
+planet_group.add(Planet(0, -260, xf=8, yf=-3, mass=0.003, orbit_speed=4, size=50, costume_num=4, loot='Item', status=['Moving', 'Loot']))

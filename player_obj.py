@@ -32,6 +32,9 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
         self.Current_Planet = None
         self.offset = None
 
+        # Inventory
+        self.inventory = []
+
     def update(self):
         # Key Input
         keys = pygame.key.get_pressed()
