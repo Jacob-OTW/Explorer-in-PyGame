@@ -20,7 +20,7 @@ def HandleKeys():
                     shop_ui.selected = 3
             if event.key == pygame.K_DOWN:
                 shop_ui.selected += 1
-                if shop_ui.selected > 3:
+                if shop_ui.selected > len(shop_ui.shop_list) - 1:
                     shop_ui.selected = 0
             if event.key == pygame.K_RETURN:
                 shop_ui.use()
