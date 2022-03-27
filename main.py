@@ -5,6 +5,7 @@ import time
 from settings import stage
 from player_obj import player_group, play
 from planet_obj import planet_group
+from pop_up_obj import pop_up_group
 from shop_UI_obj import shop_ui_group, shop_ui, return_main_menu
 
 
@@ -127,6 +128,7 @@ while True:
     player_group.update()
     planet_group.update()
     shop_ui_group.update()
+    pop_up_group.update()
 
     # Visual
     stage.screen.fill(bg_color)  # Fill the 'screen' surface with a solid color
@@ -137,6 +139,7 @@ while True:
     # play.draw_mask_attach()
     if shop_ui.shop:
         shop_ui_group.draw(stage.screen)
+    pop_up_group.draw(stage.screen)
 
     # Text
     text = myfont.render(f"{play.money}", True, (255, 255, 0))

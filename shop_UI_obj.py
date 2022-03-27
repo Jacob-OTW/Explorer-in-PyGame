@@ -1,6 +1,7 @@
 import pygame
 from settings import stage
 from player_obj import play
+from pop_up_obj import add_pop_up
 
 
 def return_main_menu():  # Returns main menu options
@@ -100,6 +101,7 @@ class Shop_UI(pygame.sprite.Sprite):
                         if play.money >= price:
                             play.money -= price
                             play.inventory.append(item)
+                            add_pop_up(f'+{item}')
                 else:
                     self.directory.pop()
                     self.shop_list = return_main_menu()
@@ -115,6 +117,7 @@ class Shop_UI(pygame.sprite.Sprite):
                         self.directory.pop()
                         return_inventory()
                     elif self.shop_list[self.selected] == 'Del':
+                        add_pop_up(f'-{self.cached_item}')
                         play.inventory.remove(self.cached_item)
                         self.directory.pop()
                         return_inventory()
