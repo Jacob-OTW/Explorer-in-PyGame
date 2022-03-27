@@ -10,7 +10,7 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
         self.angle = 0
 
         # Store Image
-        self.Idle = pygame.image.load('Ship.png').convert()
+        self.Idle = pygame.image.load('Assets/Ship.png').convert()
         self.Idle.set_colorkey((0, 0, 0))
 
         # Call Stored Image
@@ -25,11 +25,12 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
         self.YF = 0
 
         # Masks
-        self.lander_img = pygame.image.load('Lander.png').convert_alpha()
+        self.lander_img = pygame.image.load('Assets/Lander.png').convert_alpha()
         self.mask = pygame.mask.from_surface(self.lander_img)
 
         # Planet caching
         self.Current_Planet = None
+        self.offset = None
 
     def update(self):
         # Key Input
@@ -43,7 +44,13 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
 
         # Release from Planet
         if self.Current_Planet:
-            self.XF, self.YF = self.Current_Planet.XF, self.Current_Planet.YF
+            keyboard = pygame.key.get_pressed()
+            if not keyboard[pygame.K_SPACE]:
+                b = (self.rect.x - self.Current_Planet.rect.x, self.rect.y - self.Current_Planet.rect.y)
+                t = (self.offset[0] - b[0],
+                     self.offset[1] - b[1])
+                stage.change_scroll(t)
+                self.XF, self.YF = self.Current_Planet.XF, self.Current_Planet.YF
             # Set var to None if no longer touching the planet
             offset_x = play.rect.center[0] - self.Current_Planet.position[0]
             offset_y = play.rect.center[1] - self.Current_Planet.position[1]
@@ -67,9 +74,11 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
         self.image = pygame.transform.rotate(self.Idle, self.angle)
         self.rect = self.image.get_rect()
         self.rect.center = (stage.SCREEN_WIDTH / 2, stage.SCREEN_HEIGHT / 2)
-        temp = pygame.image.load('Lander.png').convert_alpha()
+        temp = pygame.image.load('Assets/Lander.png').convert_alpha()
         self.lander_img = pygame.transform.rotate(temp, self.angle)
         self.mask = pygame.mask.from_surface(self.lander_img)
+        if self.Current_Planet:
+            self.offset = (self.rect.x - self.Current_Planet.rect.x, self.rect.y - self.Current_Planet.rect.y)
 
     def accelerate(self):
         # Convert is needed because math.sin and math.cos work in radian instead of degrees

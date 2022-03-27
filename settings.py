@@ -9,7 +9,7 @@ class stage:
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), 0, 32)
     clock = pygame.time.Clock()
 
-    bg = pygame.image.load('Background.png').convert_alpha()
+    bg = pygame.image.load('Assets/Background.png').convert_alpha()
     XScroll = 0
     YScroll = 0
 

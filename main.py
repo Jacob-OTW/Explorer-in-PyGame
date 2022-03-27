@@ -17,12 +17,12 @@ def HandleKeys():
 
 class Stars:  # This class is used for the background tiles
     StarList = []  # Objects are added to this list
-    test_img = pygame.image.load('BG/BG1.png').convert_alpha()  # This variable is used for get_width and get_height
+    test_img = pygame.image.load('Assets/BG/BG1.png').convert_alpha()  # This variable is used for get_width and get_height
 
     @classmethod
     def randomBG(cls):
         # Returns one of the random images for the Background
-        return pygame.image.load(f'BG/BG{random.randint(1, 3)}.png').convert_alpha()
+        return pygame.image.load(f'Assets/BG/BG{random.randint(1, 3)}.png').convert_alpha()
 
     @classmethod
     def draw(cls):
@@ -74,7 +74,7 @@ class Stars:  # This class is used for the background tiles
 class MouseTrail:  # This class is for debugging
     def __init__(self):
         self.positions = []
-        self.img = pygame.image.load('Heart.png').convert_alpha()
+        self.img = pygame.image.load('Assets/Heart.png').convert_alpha()
 
     def Check(self):
         if pygame.mouse.get_pressed(3)[0]:
@@ -120,7 +120,7 @@ while True:
     MT.draw()  # Draw all Saved positions
 
     # Text
-    text = myfont.render(f"{play.Current_Planet} {stage.XScroll} {stage.YScroll}", True, (255, 255, 0))
+    text = myfont.render(f"{play.offset}", True, (255, 255, 0))
     stage.screen.blit(text, (5, 10))
     text2 = myfont.render(f"{round(frame_time * 1000)}ms", True, (255, 255, 0))
     stage.screen.blit(text2, (5, 25))

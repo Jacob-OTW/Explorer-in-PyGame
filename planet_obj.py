@@ -13,7 +13,7 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
 
         # init
         self.position = (x - stage.XScroll, y - stage.YScroll)
-        self.stored = pygame.image.load(f'Planets/{costume_num}.png').convert_alpha()
+        self.stored = pygame.image.load(f'Assets/Planets/{costume_num}.png').convert_alpha()
         self.image = self.stored
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
@@ -54,6 +54,7 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
         if self.mask.overlap(play.mask, offset):  # If colliding with Planet
             if play.Current_Planet != self:
                 play.Current_Planet = self
+                play.offset = (play.rect.x - self.rect.x, play.rect.y - self.rect.y)
 
 
 planet_group = pygame.sprite.Group()
