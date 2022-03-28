@@ -13,8 +13,9 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
         self.Surface = pygame.Surface((90, 52), pygame.SRCALPHA, 32)
         self.Idle = pygame.image.load('Assets/Ship.png').convert()
         self.Idle.set_colorkey((0, 0, 0))
-        self.burner = {0: pygame.image.load('Assets/burner0.png'), 1: pygame.image.load('Assets/burner1.png')}
+        self.burner = {0: pygame.image.load('Assets/burner0.png').convert_alpha(), 1: pygame.image.load('Assets/burner1.png').convert_alpha()}
         self.burner_index = 0
+        self.burner_timer = 0
 
         # Call Stored Image
         self.image = self.Surface
@@ -43,7 +44,10 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE]:
             self.Surface.blit(self.burner[self.burner_index], (0, 0))
-            self.burner_index = 0 if self.burner_index == 1 else 1
+            self.burner_timer += 1
+            if self.burner_timer >= 5:
+                self.burner_index = 0 if self.burner_index == 1 else 1
+                self.burner_timer = 0
             self.accelerate()
         if keys[pygame.K_a]:
             self.rotate(5)

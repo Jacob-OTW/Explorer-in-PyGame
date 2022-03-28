@@ -7,6 +7,8 @@ from player_obj import player_group, play
 from planet_obj import planet_group
 from pop_up_obj import pop_up_group
 from shop_UI_obj import shop_ui_group, shop_ui, return_main_menu
+from map_UI_obj import map_ui_group, map_ui
+from mimic_obj import mimic_group, Mimic
 
 
 def HandleKeys():
@@ -28,9 +30,8 @@ def HandleKeys():
             if event.key == pygame.K_e:
                 shop_ui.shop = True
                 shop_ui.shop_list = return_main_menu()
-            if event.key == pygame.K_t:
-                for i in range(10):
-                    play.inventory.append(i)
+            if event.key == pygame.K_m:
+                map_ui.map = False if map_ui.map else True
 
 
 class Stars:  # This class is used for the background tiles
@@ -115,6 +116,9 @@ MT = MouseTrail()  # Create Mouse trail object for debugging
 
 Stars.addstars()  # Add the 4 background tiles
 
+for i in planet_group.sprites():
+    mimic_group.add(Mimic(i))
+
 myfont = pygame.font.SysFont("monospace", 16)  # setup font for text
 
 last_time = time.time()
@@ -130,6 +134,7 @@ while True:
     planet_group.update()
     shop_ui_group.update()
     pop_up_group.update()
+    mimic_group.update()
 
     # Visual
     stage.screen.fill(bg_color)  # Fill the 'screen' surface with a solid color
@@ -140,6 +145,9 @@ while True:
     # play.draw_mask_attach()
     if shop_ui.shop:
         shop_ui_group.draw(stage.screen)
+    if map_ui.map:
+        map_ui_group.draw(stage.screen)
+        mimic_group.draw(stage.screen)
     pop_up_group.draw(stage.screen)
 
     # Text

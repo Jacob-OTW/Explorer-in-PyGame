@@ -78,7 +78,7 @@ class Shop_UI(pygame.sprite.Sprite):
 
     def update(self):
         self.image = pygame.image.load('Assets/shop_ui.png').convert_alpha()
-        self.selector_rect.center = (100, self.selected * 50 + self.test_text.get_height() + 2)  # Set selector position
+        self.selector_rect.midtop = (100, self.selected * 50 + self.test_text.get_height() / 2 + 4)  # Set selector position
         self.image.blit(self.selector, self.selector_rect)  # Draw selector to Surface
         for i, item in enumerate(self.shop_list):  # Draw the Text from the shop_list
             text = self.font.render(f'{item}', True, (0, 0, 0))
