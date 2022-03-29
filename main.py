@@ -32,10 +32,6 @@ def HandleKeys():
                 shop_ui.shop_list = return_main_menu()
             if event.key == pygame.K_m:
                 map_ui.map = False if map_ui.map else True
-            if event.key == pygame.K_i:
-                Mimic.map_zoom *= 2
-            elif event.key == pygame.K_o:
-                Mimic.map_zoom *= 0.5
 
 
 class Stars:  # This class is used for the background tiles
