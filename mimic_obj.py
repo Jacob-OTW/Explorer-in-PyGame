@@ -13,8 +13,8 @@ class Mimic(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
     def update(self):
-        x = stage.XScroll + self.target.rect.centerx if self.player else self.target.startx
-        y = stage.YScroll + self.target.rect.centery if self.player else self.target.starty
+        x = stage.XScroll + self.target.rect.centerx if self.player else self.target.start[0]
+        y = stage.YScroll + self.target.rect.centery if self.player else self.target.start[1]
         self.image = pygame.transform.scale(self.target.image,
                                             (self.target.rect.width / self.div, self.target.rect.height / self.div))
         self.rect = self.image.get_rect(center=((x * 0.018) + stage.SCREEN_WIDTH / 2,

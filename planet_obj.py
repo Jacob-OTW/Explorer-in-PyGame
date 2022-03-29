@@ -22,8 +22,7 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
         self.rect = self.image.get_rect(center=(x - stage.XScroll, y - stage.YScroll))
 
         # Set values
-        self.startx = x
-        self.starty = y
+        self.start = (x, y)
         self.XF = xf
         self.YF = yf
         self.status = status
@@ -46,13 +45,11 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
 
             self.orbit_value += self.mass * self.orbit_speed
 
-            self.startx += self.XF
-            self.starty += self.YF
+            self.start = (self.start[0] + self.XF, self.start[1] + self.YF)
             if play.Current_Planet == self:
                 stage.change_scroll((self.XF, self.YF))
         elif 'Asteroid' in self.status:
-            self.startx += self.XF
-            self.starty += self.YF
+            self.start = (self.start[0] + self.XF, self.start[1] + self.YF)
             if play.Current_Planet == self:
                 stage.change_scroll((self.XF, self.YF))
         if 'Loot' in self.status:
@@ -62,7 +59,7 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
 
         self.image = pygame.transform.scale(self.stored, (self.size, self.size))
         self.mask = pygame.mask.from_surface(self.image)
-        self.rect.x, self.rect.y = (self.startx - stage.XScroll, self.starty - stage.YScroll)  # Update Pos  # Move rect to updated position
+        self.rect.x, self.rect.y = (self.start[0] - stage.XScroll, self.start[1] - stage.YScroll)  # Update Pos  # Move rect to updated position
 
         # Setup for Mask collision test
         offset = (play.rect.x - self.rect.x, play.rect.y - self.rect.y)
