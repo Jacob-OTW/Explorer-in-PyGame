@@ -6,7 +6,7 @@ from player_obj import play
 
 
 class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kind
-    def __init__(self, x, y, xf=0, yf=0, status=None, size=100, orbit_speed=10, mass=0.01, loot=None, costume_num=1, buying=None, selling=None):  # buying is a dict of items that can be bought, and selling can be sold by the player
+    def __init__(self, x, y, xf=0, yf=0, status=None, size=100, orbit_speed=10, mass=0.01, loot=None, costume_num='1', buying=None, selling=None):  # buying is a dict of items that can be bought, and selling can be sold by the player
         super().__init__()
         if status is None:
             status = ['Static']
@@ -50,6 +50,11 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
             self.starty += self.YF
             if play.Current_Planet == self:
                 stage.change_scroll((self.XF, self.YF))
+        elif 'Asteroid' in self.status:
+            self.startx += self.XF
+            self.starty += self.YF
+            if play.Current_Planet == self:
+                stage.change_scroll((self.XF, self.YF))
         if 'Loot' in self.status:
             if play.Current_Planet == self:
                 if self.loot not in play.inventory:
@@ -68,5 +73,6 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
 
 planet_group = pygame.sprite.Group()
 planet_group.add(Planet(0, 70, status=['Static']))
-planet_group.add(Planet(0, -130, xf=8, yf=-3, mass=0.005, orbit_speed=2, size=50, costume_num=3, buying={'Wood': 5, 'Steel': 10}, selling={'Wood': 3, 'Item':10},  status=['Moving', 'Shop']))
-planet_group.add(Planet(0, -260, xf=8, yf=-3, mass=0.003, orbit_speed=4, size=50, costume_num=4, loot='Item', status=['Moving', 'Loot']))
+planet_group.add(Planet(0, -130, xf=8, yf=-3, mass=0.005, orbit_speed=2, size=50, costume_num='3', buying={'Wood': 5, 'Steel': 10}, selling={'Wood': 3, 'Item': 10},  status=['Moving', 'Shop']))
+planet_group.add(Planet(0, -260, xf=8, yf=-3, mass=0.003, orbit_speed=4, size=50, costume_num='4', loot='Item', status=['Moving', 'Loot']))
+planet_group.add(Planet(100, 100, xf=1, yf=1, costume_num='asteroid', loot='Item_A', status=['Asteroid', 'Loot']))

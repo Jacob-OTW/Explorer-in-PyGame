@@ -68,6 +68,14 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
         # Move game world if floating
         if not self.Current_Planet:
             stage.change_scroll((self.XF, self.YF))
+            if stage.XScroll > 25000:
+                stage.XScroll = -25000
+            elif stage.XScroll < -25000:
+                stage.XScroll = 25000
+            elif stage.YScroll > 10000:
+                stage.YScroll = -10000
+            elif stage.YScroll < -10000:
+                stage.YScroll = 10000
 
         # Align all images and masks
         self.image = pygame.transform.rotate(self.Surface, self.angle)
