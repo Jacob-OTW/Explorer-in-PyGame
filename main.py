@@ -5,6 +5,7 @@ import time
 from settings import stage
 from player_obj import player_group, play
 from planet_obj import planet_group
+from creature_obj import creature_group
 from pop_up_obj import pop_up_group
 from shop_UI_obj import shop_ui_group, shop_ui, return_main_menu
 from map_UI_obj import map_ui_group, map_ui
@@ -133,6 +134,7 @@ while True:
     MT.Check()  # Check if mouse button is down
     player_group.update()
     planet_group.update()
+    creature_group.update()
     shop_ui_group.update()
     pop_up_group.update()
     mimic_group.update()
@@ -140,7 +142,8 @@ while True:
     # Visual
     stage.screen.fill(bg_color)  # Fill the 'screen' surface with a solid color
     Stars.draw()  # Draw the Stars and update their position
-    planet_group.draw(stage.screen)  # Draw the Player
+    planet_group.draw(stage.screen)  # Draw the planets
+    creature_group.draw(stage.screen)
     player_group.draw(stage.screen)
     MT.draw()  # Draw all Saved positions
     # play.draw_mask_attach()
