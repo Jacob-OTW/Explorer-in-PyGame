@@ -48,7 +48,11 @@ def return_sell():
     a = []
     while len(a) - 1 < shop_ui.max_shop_length:
         a.append('')
-    for i, item in enumerate(play.inventory):
+    clean = []
+    for item in play.inventory:
+        if item in play.Current_Planet.selling:
+            clean.append(item)
+    for i, item in enumerate(clean):
         if item not in play.Current_Planet.selling:
             continue
         else:
@@ -78,7 +82,8 @@ class Shop_UI(pygame.sprite.Sprite):
 
     def update(self):
         self.image = pygame.image.load('Assets/shop_ui.png').convert_alpha()
-        self.selector_rect.midtop = (100, self.selected * 50 + self.test_text.get_height() / 2 + 4)  # Set selector position
+        self.selector_rect.midtop = (
+        100, self.selected * 50 + self.test_text.get_height() / 2 + 4)  # Set selector position
         self.image.blit(self.selector, self.selector_rect)  # Draw selector to Surface
         for i, item in enumerate(self.shop_list):  # Draw the Text from the shop_list
             text = self.font.render(f'{item}', True, (0, 0, 0))
@@ -102,33 +107,6 @@ class Shop_UI(pygame.sprite.Sprite):
                     return_inventory()
                 elif choice == 'Exit':
                     self.shop = False
-            elif not play.Current_Planet:
-                self.shop = False
-                self.shop_list = return_main_menu()
-                self.directory = []
-            # Extra Menus
-            elif self.directory[0] == 'Buy':  # Buy Menu
-                if choice != 'Return':
-                    item = choice
-                    if item in play.Current_Planet.buying:
-                        price = play.Current_Planet.buying[item]
-                        if play.money >= price:
-                            play.money -= price
-                            play.inventory.append(item)
-                            add_pop_up(f'+{item}', f'-{price}')
-                else:
-                    self.directory.pop()
-                    self.shop_list = return_main_menu()
-            elif self.directory[0] == 'Sell':  # Sell Menu
-                if not choice == 'Return':
-                    if choice in play.Current_Planet.selling:
-                        play.inventory.remove(choice)
-                        play.money += play.Current_Planet.selling[choice]
-                        add_pop_up(f'-{choice}', f'+{play.Current_Planet.selling[choice]}')
-                        self.shop_list = return_sell()
-                else:
-                    self.directory.pop()
-                    self.shop_list = return_main_menu()
             elif self.directory[0] == 'Inventory':  # Inventory menu
                 if len(self.directory) > 1 and self.directory[1] == 'Item':
                     if self.cached_item == '' or choice == 'Return':
@@ -160,6 +138,33 @@ class Shop_UI(pygame.sprite.Sprite):
                         if self.cached_item != '':
                             self.shop_list = ['Del', 'Return']
                             self.directory.append('Item')
+            elif not play.Current_Planet or 'Shop' not in play.Current_Planet.status:
+                self.shop = False
+                self.shop_list = return_main_menu()
+                self.directory = []
+            # Extra Menus
+            elif self.directory[0] == 'Buy':  # Buy Menu
+                if choice != 'Return':
+                    item = choice
+                    if item in play.Current_Planet.buying:
+                        price = play.Current_Planet.buying[item]
+                        if play.money >= price:
+                            play.money -= price
+                            play.inventory.append(item)
+                            add_pop_up(f'+{item}', f'-{price}')
+                else:
+                    self.directory.pop()
+                    self.shop_list = return_main_menu()
+            elif self.directory[0] == 'Sell':  # Sell Menu
+                if not choice == 'Return':
+                    if choice in play.Current_Planet.selling:
+                        play.inventory.remove(choice)
+                        play.money += play.Current_Planet.selling[choice]
+                        add_pop_up(f'-{choice}', f'+{play.Current_Planet.selling[choice]}')
+                        self.shop_list = return_sell()
+                else:
+                    self.directory.pop()
+                    self.shop_list = return_main_menu()
 
 
 shop_ui_group = pygame.sprite.GroupSingle()

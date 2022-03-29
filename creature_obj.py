@@ -2,6 +2,7 @@ import pygame
 import math
 import random
 from settings import stage
+from player_obj import play
 
 
 class Creature(pygame.sprite.Sprite):
@@ -15,13 +16,17 @@ class Creature(pygame.sprite.Sprite):
         self.force = pygame.math.Vector2(0, 0)
         self.angle = 90
         self.timer = 0
+        self.loot = 'Dead Skin'
 
     def update(self):
         self.cycle_animation()
         self.start += self.force
         self.force *= 98 / 100
-        self.image = pygame.transform.rotate(pygame.image.load(f'Assets/Creature/{round(self.animation_index)}.png'), self.angle - 90)
+        self.image = pygame.transform.rotate(pygame.image.load(f'Assets/Creature/{round(self.animation_index)}.png'),
+                                             self.angle - 90)
         self.rect = self.image.get_rect(center=(self.start[0] - stage.XScroll, self.start[1] - stage.YScroll))
+        if math.sqrt((self.rect.x - play.rect.x)**2 + (self.rect.y - play.rect.y)**2) < 200 and self.loot not in play.inventory:
+            play.inventory.append(self.loot)
 
     def cycle_animation(self):
         speed = 0.3
