@@ -32,6 +32,10 @@ def HandleKeys():
                 shop_ui.shop_list = return_main_menu()
             if event.key == pygame.K_m:
                 map_ui.map = False if map_ui.map else True
+            if event.key == pygame.K_i:
+                Mimic.map_zoom *= 2
+            elif event.key == pygame.K_o:
+                Mimic.map_zoom *= 0.5
 
 
 class Stars:  # This class is used for the background tiles
@@ -53,7 +57,7 @@ class Stars:  # This class is used for the background tiles
     @classmethod
     def addstars(cls):
         # This will create and 4 objects with the correct starting points for a flawless background
-        for i in [(stage.SCREEN_WIDTH / 2 - cls.test_img.get_width() / 2,
+        for u in [(stage.SCREEN_WIDTH / 2 - cls.test_img.get_width() / 2,
                    stage.SCREEN_HEIGHT / 2 - cls.test_img.get_height() / 2),
                   (stage.SCREEN_WIDTH / 2 - cls.test_img.get_width() * 1.5,
                    stage.SCREEN_HEIGHT / 2 - cls.test_img.get_height() / 2),
@@ -61,7 +65,7 @@ class Stars:  # This class is used for the background tiles
                    stage.SCREEN_HEIGHT / 2 - cls.test_img.get_height() * 1.5),
                   (stage.SCREEN_WIDTH / 2 - cls.test_img.get_width() * 1.5,
                    stage.SCREEN_HEIGHT / 2 - cls.test_img.get_height() * 1.5)]:
-            cls.StarList.append(Stars(i[0], i[1]))
+            cls.StarList.append(Stars(u[0], u[1]))
 
     def __init__(self, x, y):
         self.position = (x, y)
