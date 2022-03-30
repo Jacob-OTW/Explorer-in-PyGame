@@ -33,6 +33,9 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
         self.Current_Planet = None
         self.offset = None
 
+        # Mimic
+        self.seen = True
+
         # Inventory
         self.inventory = []
         self.money = 10

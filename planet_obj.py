@@ -1,6 +1,4 @@
 import math
-import random
-
 import pygame
 
 from settings import stage
@@ -9,8 +7,7 @@ from player_obj import play
 
 class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kind
     def __init__(self, x, y, xf=0, yf=0, status=None, size=100, orbit_speed=10, mass=0.01, loot=None, costume_num='1',
-                 buying=None,
-                 selling=None):  # buying is a dict of items that can be bought, and selling can be sold by the player
+                 buying=None, selling=None, chart=None):
         super().__init__()
         if status is None:
             status = ['Static']
@@ -36,6 +33,11 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
         self.loot = loot
         self.buying = buying
         self.selling = selling
+        self.chart = chart
+        if self.chart:
+            self.seen = False
+        else:
+            self.seen = True
 
         # std values
         self.orbit_value = 0
@@ -66,7 +68,15 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
         self.image = pygame.transform.scale(self.stored, (self.size, self.size))
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.x, self.rect.y = (
-            self.start[0] - stage.XScroll, self.start[1] - stage.YScroll)  # Update Pos  # Move rect to updated position
+            self.start[0] - stage.XScroll, self.start[1] - stage.YScroll)
+
+        if self.chart:
+            if self.chart in play.inventory:
+                self.seen = True
+            else:
+                self.seen = False
+        else:
+            self.seen = True
 
         # Setup for Mask collision test
         offset = (play.rect.x - self.rect.x, play.rect.y - self.rect.y)
@@ -81,5 +91,5 @@ planet_group.add(
     Planet(0, -130, xf=8, yf=-3, mass=0.005, orbit_speed=2, size=50, costume_num='3', buying={'Wood': 5, 'Steel': 10},
            selling={'Wood': 3, 'Item': 10, 'Dead Skin': 15}, status=['Moving', 'Shop']))
 planet_group.add(Planet(0, -260, xf=8, yf=-3, mass=0.003, orbit_speed=4, size=50, costume_num='4', loot='Item',
-                        status=['Moving', 'Loot']))
+                        status=['Moving', 'Loot'], chart='Item'))
 planet_group.add(Planet(100, 100, xf=50, yf=-50, costume_num='asteroid', loot='Item_A', status=['Asteroid', 'Loot']))

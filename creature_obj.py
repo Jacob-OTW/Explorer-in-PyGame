@@ -17,6 +17,7 @@ class Creature(pygame.sprite.Sprite):
         self.angle = 90
         self.timer = 0
         self.loot = 'Dead Skin'
+        self.seen = True
 
     def update(self):
         self.cycle_animation()
