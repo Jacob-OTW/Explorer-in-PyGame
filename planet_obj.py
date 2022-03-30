@@ -61,7 +61,7 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
             if play.Current_Planet == self:
                 if self.loot not in play.inventory:
                     play.inventory.append(self.loot)
-        self.loop()
+        stage.loop(self)
 
         self.image = pygame.transform.scale(self.stored, (self.size, self.size))
         self.mask = pygame.mask.from_surface(self.image)
@@ -74,16 +74,6 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
             if play.Current_Planet != self:
                 play.Current_Planet = self
 
-    def loop(self):
-        if self.start[0] > stage.World_Size_X / 2:
-            self.start = ((stage.World_Size_X / 2) * -1, self.start[1])
-        elif self.start[0] < (stage.World_Size_X / 2 * -1):
-            self.start = (stage.World_Size_X / 2, self.start[1])
-        elif self.start[1] > stage.World_Size_Y / 2:
-            self.start = (self.start[1], (stage.World_Size_Y / 2) * -1)
-        elif self.start[1] < (stage.World_Size_Y / 2) * -1:
-            self.start = (self.start[1], stage.World_Size_Y / 2)
-
 
 planet_group = pygame.sprite.Group()
 planet_group.add(Planet(0, 70, status=['Static']))
@@ -92,4 +82,4 @@ planet_group.add(
            selling={'Wood': 3, 'Item': 10, 'Dead Skin': 15}, status=['Moving', 'Shop']))
 planet_group.add(Planet(0, -260, xf=8, yf=-3, mass=0.003, orbit_speed=4, size=50, costume_num='4', loot='Item',
                         status=['Moving', 'Loot']))
-planet_group.add(Planet(100, 100, xf=random.randint(-5, 5), yf=random.randint(-5, 5), costume_num='asteroid', loot='Item_A', status=['Asteroid', 'Loot']))
+planet_group.add(Planet(100, 100, xf=50, yf=-50, costume_num='asteroid', loot='Item_A', status=['Asteroid', 'Loot']))

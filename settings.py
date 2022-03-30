@@ -22,3 +22,14 @@ class stage:
     def change_scroll(cls, tup):
         cls.XScroll += tup[0]
         cls.YScroll += tup[1]
+
+    @classmethod
+    def loop(cls, self):
+        if self.start[0] > stage.World_Size_X / 2:
+            self.start = ((stage.World_Size_X / 2) * -1, self.start[1])
+        elif self.start[0] < (stage.World_Size_X / 2 * -1):
+            self.start = (stage.World_Size_X / 2, self.start[1])
+        elif self.start[1] > stage.World_Size_Y / 2:
+            self.start = (self.start[0], (stage.World_Size_Y / 2) * -1)
+        elif self.start[1] < (stage.World_Size_Y / 2) * -1:
+            self.start = (self.start[0], stage.World_Size_Y / 2)

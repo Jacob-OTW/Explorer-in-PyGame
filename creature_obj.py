@@ -21,6 +21,7 @@ class Creature(pygame.sprite.Sprite):
     def update(self):
         self.cycle_animation()
         self.start += self.force
+        stage.loop(self)
         self.force *= 98 / 100
         self.image = pygame.transform.rotate(pygame.image.load(f'Assets/Creature/{round(self.animation_index)}.png'),
                                              self.angle - 90)
