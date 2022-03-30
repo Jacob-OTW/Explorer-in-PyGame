@@ -6,6 +6,8 @@ class stage:
     pygame.init()
     SCREEN_WIDTH = 960
     SCREEN_HEIGHT = 720
+    World_Size_X = 50000
+    World_Size_Y = 20000
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), 0, 32)
     clock = pygame.time.Clock()

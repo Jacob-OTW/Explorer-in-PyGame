@@ -157,7 +157,7 @@ while True:
     pop_up_group.draw(stage.screen)
 
     # Text
-    text = myfont.render(f"{play.money}", True, (255, 255, 0))
+    text = myfont.render(f"", True, (255, 255, 0))
     stage.screen.blit(text, (5, 10))
     text2 = myfont.render(f"{round(frame_time * 1000)}ms", True, (255, 255, 0))
     stage.screen.blit(text2, (5, 25))

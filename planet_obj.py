@@ -1,4 +1,6 @@
 import math
+import random
+
 import pygame
 
 from settings import stage
@@ -6,7 +8,9 @@ from player_obj import play
 
 
 class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kind
-    def __init__(self, x, y, xf=0, yf=0, status=None, size=100, orbit_speed=10, mass=0.01, loot=None, costume_num='1', buying=None, selling=None):  # buying is a dict of items that can be bought, and selling can be sold by the player
+    def __init__(self, x, y, xf=0, yf=0, status=None, size=100, orbit_speed=10, mass=0.01, loot=None, costume_num='1',
+                 buying=None,
+                 selling=None):  # buying is a dict of items that can be bought, and selling can be sold by the player
         super().__init__()
         if status is None:
             status = ['Static']
@@ -46,6 +50,7 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
             self.orbit_value += self.mass * self.orbit_speed
 
             self.start = (self.start[0] + self.XF, self.start[1] + self.YF)
+
             if play.Current_Planet == self:
                 stage.change_scroll((self.XF, self.YF))
         elif 'Asteroid' in self.status:
@@ -56,10 +61,12 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
             if play.Current_Planet == self:
                 if self.loot not in play.inventory:
                     play.inventory.append(self.loot)
+        self.loop()
 
         self.image = pygame.transform.scale(self.stored, (self.size, self.size))
         self.mask = pygame.mask.from_surface(self.image)
-        self.rect.x, self.rect.y = (self.start[0] - stage.XScroll, self.start[1] - stage.YScroll)  # Update Pos  # Move rect to updated position
+        self.rect.x, self.rect.y = (
+            self.start[0] - stage.XScroll, self.start[1] - stage.YScroll)  # Update Pos  # Move rect to updated position
 
         # Setup for Mask collision test
         offset = (play.rect.x - self.rect.x, play.rect.y - self.rect.y)
@@ -67,9 +74,22 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
             if play.Current_Planet != self:
                 play.Current_Planet = self
 
+    def loop(self):
+        if self.start[0] > stage.World_Size_X / 2:
+            self.start = ((stage.World_Size_X / 2) * -1, self.start[1])
+        elif self.start[0] < (stage.World_Size_X / 2 * -1):
+            self.start = (stage.World_Size_X / 2, self.start[1])
+        elif self.start[1] > stage.World_Size_Y / 2:
+            self.start = (self.start[1], (stage.World_Size_Y / 2) * -1)
+        elif self.start[1] < (stage.World_Size_Y / 2) * -1:
+            self.start = (self.start[1], stage.World_Size_Y / 2)
+
 
 planet_group = pygame.sprite.Group()
 planet_group.add(Planet(0, 70, status=['Static']))
-planet_group.add(Planet(0, -130, xf=8, yf=-3, mass=0.005, orbit_speed=2, size=50, costume_num='3', buying={'Wood': 5, 'Steel': 10}, selling={'Wood': 3, 'Item': 10, 'Dead Skin': 15},  status=['Moving', 'Shop']))
-planet_group.add(Planet(0, -260, xf=8, yf=-3, mass=0.003, orbit_speed=4, size=50, costume_num='4', loot='Item', status=['Moving', 'Loot']))
-planet_group.add(Planet(100, 100, xf=1, yf=1, costume_num='asteroid', loot='Item_A', status=['Asteroid', 'Loot']))
+planet_group.add(
+    Planet(0, -130, xf=8, yf=-3, mass=0.005, orbit_speed=2, size=50, costume_num='3', buying={'Wood': 5, 'Steel': 10},
+           selling={'Wood': 3, 'Item': 10, 'Dead Skin': 15}, status=['Moving', 'Shop']))
+planet_group.add(Planet(0, -260, xf=8, yf=-3, mass=0.003, orbit_speed=4, size=50, costume_num='4', loot='Item',
+                        status=['Moving', 'Loot']))
+planet_group.add(Planet(100, 100, xf=random.randint(-5, 5), yf=random.randint(-5, 5), costume_num='asteroid', loot='Item_A', status=['Asteroid', 'Loot']))
