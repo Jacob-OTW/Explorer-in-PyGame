@@ -4,7 +4,7 @@ import random
 import time
 from settings import stage
 from player_obj import player_group, play
-from arrow_obj import arrow_group, arrow
+from arrow_obj import arrow_group
 from planet_obj import planet_group
 from creature_obj import creature_group
 from pop_up_obj import pop_up_group

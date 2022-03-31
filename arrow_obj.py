@@ -19,7 +19,7 @@ def dir_to(mp, tp):
 class Arrow(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.stored = pygame.image.load('Assets/arrow.png')
+        self.stored = pygame.image.load('Assets/arrow.png').convert_alpha()
         self.image = self.stored
         self.rect = self.image.get_rect()
         self.angle = 0

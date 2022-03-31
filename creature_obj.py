@@ -10,7 +10,7 @@ class Creature(pygame.sprite.Sprite):
         super().__init__()
         self.animation_index = 0
         self.animation_flow = True
-        self.image = pygame.image.load(f'Assets/Creature/{self.animation_index}.png')
+        self.image = pygame.image.load(f'Assets/Creature/{self.animation_index}.png').convert_alpha()
         self.rect = self.image.get_rect()
         self.start = pos
         self.force = pygame.math.Vector2(0, 0)

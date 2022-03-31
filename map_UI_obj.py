@@ -5,7 +5,7 @@ from settings import stage
 class Map_UI(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.image.load('Assets/map_ui.png')
+        self.image = pygame.image.load('Assets/map_ui.png').convert_alpha()
         self.rect = self.image.get_rect(center=(stage.SCREEN_WIDTH / 2, stage.SCREEN_HEIGHT / 2))
         self.map = False
 

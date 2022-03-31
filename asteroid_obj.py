@@ -6,7 +6,7 @@ class Asteroid(pygame.sprite.Sprite):
     def __init__(self, pos=(0, 0), force=(0, 0), loot='Item_A'):
         super().__init__()
         self.status = ['Asteroid']
-        self.image = pygame.image.load('Assets/Planets/asteroid.png')
+        self.image = pygame.image.load('Assets/Planets/asteroid.png').convert_alpha()
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
         self.startx, self.starty = pos
