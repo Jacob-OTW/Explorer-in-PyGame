@@ -4,12 +4,14 @@ import random
 import time
 from settings import stage
 from player_obj import player_group, play
+from arrow_obj import arrow_group, arrow
 from planet_obj import planet_group
 from creature_obj import creature_group
 from pop_up_obj import pop_up_group
 from shop_UI_obj import shop_ui_group, shop_ui, return_main_menu
 from map_UI_obj import map_ui_group, map_ui
 from mimic_obj import mimic_group, Mimic
+from map_selector_obj import map_selector_group, map_selector
 
 
 def HandleKeys():
@@ -33,6 +35,8 @@ def HandleKeys():
                 shop_ui.shop_list = return_main_menu()
             if event.key == pygame.K_m:
                 map_ui.map = False if map_ui.map else True
+            if event.key == pygame.K_g:
+                map_selector.next_target()
 
 
 class Stars:  # This class is used for the background tiles
@@ -135,11 +139,13 @@ while True:
     HandleKeys()  # Check if game quit or Keys were pressed
     MT.Check()  # Check if mouse button is down
     player_group.update()
+    arrow_group.update()
     planet_group.update()
     creature_group.update()
     shop_ui_group.update()
     pop_up_group.update()
     mimic_group.update()
+    map_selector_group.update()
 
     # Visual
     stage.screen.fill(bg_color)  # Fill the 'screen' surface with a solid color
@@ -147,17 +153,21 @@ while True:
     planet_group.draw(stage.screen)  # Draw the planets
     creature_group.draw(stage.screen)
     player_group.draw(stage.screen)
+    if map_selector.target:
+        arrow_group.draw(stage.screen)
     MT.draw()  # Draw all Saved positions
     # play.draw_mask_attach()
     if shop_ui.shop:
         shop_ui_group.draw(stage.screen)
     if map_ui.map:
         map_ui_group.draw(stage.screen)
+        if map_selector.target:
+            map_selector_group.draw(stage.screen)
         mimic_group.draw(stage.screen)
     pop_up_group.draw(stage.screen)
 
     # Text
-    text = myfont.render(f"", True, (255, 255, 0))
+    text = myfont.render(f"{map_selector.target}", True, (255, 255, 0))
     stage.screen.blit(text, (5, 10))
     text2 = myfont.render(f"{round(frame_time * 1000)}ms", True, (255, 255, 0))
     stage.screen.blit(text2, (5, 25))

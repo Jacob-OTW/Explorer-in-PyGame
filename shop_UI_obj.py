@@ -2,6 +2,7 @@ import pygame
 from settings import stage
 from player_obj import play
 from pop_up_obj import add_pop_up
+from map_selector_obj import map_selector
 
 
 def return_main_menu():  # Returns main menu options
@@ -62,6 +63,15 @@ def return_sell():
     return a
 
 
+def return_settings():
+    a = []
+    while len(a) - 1 < shop_ui.max_shop_length:
+        a.append('')
+    shop_ui.shop_list = a
+    shop_ui.shop_list[0] = 'Clear Target'
+    shop_ui.shop_list[shop_ui.max_shop_length] = 'Return'
+
+
 class Shop_UI(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -83,7 +93,7 @@ class Shop_UI(pygame.sprite.Sprite):
     def update(self):
         self.image = pygame.image.load('Assets/shop_ui.png').convert_alpha()
         self.selector_rect.midtop = (
-        100, self.selected * 50 + self.test_text.get_height() / 2 + 4)  # Set selector position
+            100, self.selected * 50 + self.test_text.get_height() / 2 + 4)  # Set selector position
         self.image.blit(self.selector, self.selector_rect)  # Draw selector to Surface
         for i, item in enumerate(self.shop_list):  # Draw the Text from the shop_list
             text = self.font.render(f'{item}', True, (0, 0, 0))
@@ -105,6 +115,9 @@ class Shop_UI(pygame.sprite.Sprite):
                 elif choice == 'Inventory':
                     self.directory.append('Inventory')
                     return_inventory()
+                elif choice == 'Settings':
+                    self.directory.append('Settings')
+                    return_settings()
                 elif choice == 'Exit':
                     self.shop = False
             elif self.directory[0] == 'Inventory':  # Inventory menu
@@ -138,6 +151,12 @@ class Shop_UI(pygame.sprite.Sprite):
                         if self.cached_item != '':
                             self.shop_list = ['Del', 'Return']
                             self.directory.append('Item')
+            elif self.directory[0] == 'Settings':
+                if choice == 'Return':
+                    self.directory.pop()
+                    self.shop_list = return_main_menu()
+                elif choice == 'Clear Target':
+                    map_selector.target = None
             elif not play.Current_Planet or 'Shop' not in play.Current_Planet.status:
                 self.shop = False
                 self.shop_list = return_main_menu()
