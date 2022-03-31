@@ -32,6 +32,7 @@ def HandleKeys():
                 shop_ui.use()
             if event.key == pygame.K_e:
                 shop_ui.shop = True
+                shop_ui.directory = []
                 shop_ui.shop_list = return_main_menu()
             if event.key == pygame.K_m:
                 map_ui.map = False if map_ui.map else True
