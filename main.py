@@ -36,8 +36,6 @@ def HandleKeys():
                 map_ui.map = False if map_ui.map else True
             if event.key == pygame.K_g:  # Cycle target for arrow and map
                 map_selector.next_target()
-            if event.key == pygame.K_u:
-                add_probe()
 
 
 class MouseTrail:  # This class is for debugging
@@ -73,6 +71,7 @@ for i in planet_group.sprites():
 myfont = pygame.font.SysFont("monospace", 16)  # setup font for text
 
 last_time = time.time()
+play.inventory.append('Probe')
 while True:
     # Timing
     frame_time = time.time() - last_time

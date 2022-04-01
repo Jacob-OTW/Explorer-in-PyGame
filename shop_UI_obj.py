@@ -3,6 +3,7 @@ from settings import stage
 from player_obj import play
 from pop_up_obj import add_pop_up
 from nav_objs import map_selector
+from space_probe_obj import add_probe
 
 
 def return_main_menu():  # Returns main menu options
@@ -89,6 +90,7 @@ class Shop_UI(pygame.sprite.Sprite):
         self.cached_item = None  # used to delete items and such
         self.shop = False  # Is shop shown
         self.page = 0  # Page is used for the inventory and later prob. for selling and buying
+        self.usable_items = ['Item', 'Dead Skin', 'Probe']
 
     def update(self):
         self.image = pygame.image.load('Assets/shop_ui.png').convert_alpha()
@@ -131,6 +133,18 @@ class Shop_UI(pygame.sprite.Sprite):
                             play.inventory.remove(self.cached_item)
                             self.directory.pop()
                             return_inventory()
+                    elif choice == 'Use':
+                        match self.cached_item:
+                            case 'Item':
+                                print('Yes')
+                            case 'Dead Skin':
+                                print('No')
+                            case 'Probe':
+                                add_probe()
+                                play.inventory.remove('Probe')
+                                self.directory.pop()
+                                return_inventory()
+
                     else:
                         self.directory.pop()
                         return_inventory()
@@ -149,7 +163,10 @@ class Shop_UI(pygame.sprite.Sprite):
                     else:
                         self.cached_item = self.shop_list[self.selected]
                         if self.cached_item != '':
-                            self.shop_list = ['Del', 'Return']
+                            if self.cached_item in self.usable_items:
+                                self.shop_list = ['Use', 'Del', 'Return']
+                            else:
+                                self.shop_list = ['Del', 'Return']
                             self.directory.append('Item')
             elif self.directory[0] == 'Settings':
                 if choice == 'Return':
