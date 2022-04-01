@@ -38,6 +38,9 @@ class Mimic(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=((x * 0.018) + stage.SCREEN_WIDTH / 2,
                                                 (y * 0.018) + stage.SCREEN_HEIGHT / 2))
 
+        if not self.target.alive():
+            self.kill()
+
 
 mimic_group = pygame.sprite.Group()
 
@@ -72,9 +75,9 @@ class Map_Selector(pygame.sprite.Sprite):
         self.target = None
         self.target_index = 1  # Starts with 1 because 0 is the ship
         self.possible = []
-        for i in mimic_group.sprites():
-            if i.target.seen:
-                self.possible.append(i)
+        for mimic in mimic_group.sprites():
+            if mimic.target.seen:
+                self.possible.append(mimic)
 
     def update(self):
         if self.target and not self.target.target.seen:
