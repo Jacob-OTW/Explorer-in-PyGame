@@ -4,14 +4,11 @@ import random
 import time
 from settings import stage
 from player_obj import player_group, play
-from arrow_obj import arrow_group
 from planet_obj import planet_group
 from creature_obj import creature_group
 from pop_up_obj import pop_up_group
 from shop_UI_obj import shop_ui_group, shop_ui, return_main_menu
-from map_UI_obj import map_ui_group, map_ui
-from mimic_obj import mimic_group, Mimic
-from map_selector_obj import map_selector_group, map_selector
+from nav_objs import mimic_group, Mimic, map_selector_group, map_selector, map_ui_group, map_ui, arrow_group
 
 
 def HandleKeys():

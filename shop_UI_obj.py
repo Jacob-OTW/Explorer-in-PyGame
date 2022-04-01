@@ -2,7 +2,7 @@ import pygame
 from settings import stage
 from player_obj import play
 from pop_up_obj import add_pop_up
-from map_selector_obj import map_selector
+from nav_objs import map_selector
 
 
 def return_main_menu():  # Returns main menu options
