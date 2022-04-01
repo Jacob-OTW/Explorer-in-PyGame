@@ -3,6 +3,13 @@ import pygame
 
 from settings import stage
 from player_obj import play
+from space_probe_obj import space_probe_group
+
+
+def dis_to(mp, tp):
+    x = tp[0] - mp[0]
+    y = tp[1] - mp[1]
+    return math.sqrt(x ** 2 + y ** 2)
 
 
 class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kind
@@ -34,6 +41,7 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
         self.buying = buying
         self.selling = selling
         self.chart = chart
+        self.seen_by_probe = False
         if self.chart:
             self.seen = False
         else:
@@ -69,9 +77,12 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.x, self.rect.y = (
             self.start[0] - stage.XScroll, self.start[1] - stage.YScroll)
+        if space_probe_group.sprites():
+            if dis_to(self.rect.center, space_probe_group.sprites()[0].rect.center) < 2000:
+                self.seen_by_probe = True
 
         if self.chart:
-            if self.chart in play.inventory:
+            if self.chart in play.inventory or self.seen_by_probe:
                 self.seen = True
             else:
                 self.seen = False
