@@ -150,31 +150,33 @@ class Shop_UI(pygame.sprite.Sprite):
                         self.directory.pop()
                         return_inventory()
                 else:
-                    if choice == 'Next Page':
-                        self.page += self.max_shop_length - 2
-                        return_inventory()
-                    elif choice == 'Last Page':
-                        self.page -= self.max_shop_length - 2
-                        if self.page < 0:
-                            self.page = 0
-                        return_inventory()
-                    elif choice == 'Return':
+                    match choice:
+                        case 'Next Page':
+                            self.page += self.max_shop_length - 2
+                            return_inventory()
+                        case 'Last Page':
+                            self.page -= self.max_shop_length - 2
+                            if self.page < 0:
+                                self.page = 0
+                            return_inventory()
+                        case 'Return':
+                            self.directory.pop()
+                            self.shop_list = return_main_menu()
+                        case _:
+                            self.cached_item = self.shop_list[self.selected]
+                            if self.cached_item != '':
+                                if self.cached_item in self.usable_items:
+                                    self.shop_list = ['Use', 'Del', 'Return']
+                                else:
+                                    self.shop_list = ['Del', 'Return']
+                                self.directory.append('Item')
+            elif self.directory[0] == 'Settings':
+                match choice:
+                    case 'Return':
                         self.directory.pop()
                         self.shop_list = return_main_menu()
-                    else:
-                        self.cached_item = self.shop_list[self.selected]
-                        if self.cached_item != '':
-                            if self.cached_item in self.usable_items:
-                                self.shop_list = ['Use', 'Del', 'Return']
-                            else:
-                                self.shop_list = ['Del', 'Return']
-                            self.directory.append('Item')
-            elif self.directory[0] == 'Settings':
-                if choice == 'Return':
-                    self.directory.pop()
-                    self.shop_list = return_main_menu()
-                elif choice == 'Clear Target':
-                    map_selector.target = None
+                    case 'Clear Target':
+                        map_selector.target = None
             elif not play.Current_Planet or 'Shop' not in play.Current_Planet.status:
                 self.shop = False
                 self.shop_list = return_main_menu()
