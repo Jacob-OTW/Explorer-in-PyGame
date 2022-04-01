@@ -102,26 +102,27 @@ class Shop_UI(pygame.sprite.Sprite):
             text_rect = text.get_rect(center=(100, i * 50 + text.get_height()))
             self.image.blit(text, text_rect)
 
-    def use(self):  # Used whenever the user presses 'E'
+    def use(self):  # Used whenever the user presses 'Return'
         if self.shop:
             choice = self.shop_list[self.selected]  # Choice is the item that was just confirmed by the user
             if not self.directory:  # Main Menu
-                if choice == 'Buy':  # Buy was selected
-                    self.directory.append('Buy')
-                    self.shop_list = return_buy()
-                elif choice == 'Sell':  # Sell was selected
-                    self.directory.append('Sell')
-                    self.shop_list = return_sell()
-                elif choice == 'Refuel':
-                    print('You have been refueled!')
-                elif choice == 'Inventory':
-                    self.directory.append('Inventory')
-                    return_inventory()
-                elif choice == 'Settings':
-                    self.directory.append('Settings')
-                    return_settings()
-                elif choice == 'Exit':
-                    self.shop = False
+                match choice:
+                    case 'Buy':  # Buy was selected
+                        self.directory.append('Buy')
+                        self.shop_list = return_buy()
+                    case 'Sell':  # Sell was selected
+                        self.directory.append('Sell')
+                        self.shop_list = return_sell()
+                    case 'Refuel':
+                        print('You have been refueled!')
+                    case 'Inventory':
+                        self.directory.append('Inventory')
+                        return_inventory()
+                    case 'Settings':
+                        self.directory.append('Settings')
+                        return_settings()
+                    case 'Exit':
+                        self.shop = False
             elif self.directory[0] == 'Inventory':  # Inventory menu
                 if len(self.directory) > 1 and self.directory[1] == 'Item':
                     if self.cached_item == '' or choice == 'Return':
