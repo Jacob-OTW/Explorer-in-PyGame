@@ -5,6 +5,7 @@ from player_obj import play
 from planet_obj import planet_group
 from radar_obj import radar
 from nav_objs import Mimic, mimic_group
+from effects import effect_group, Explosion
 
 
 def add_missile():
@@ -70,7 +71,9 @@ class Missile(pygame.sprite.Sprite):
             offset = (planet.rect.x - self.rect.x, planet.rect.y - self.rect.y)
             if self.mask.overlap(planet.mask, offset):
                 if 'Asteroid' in planet.status:
+                    play.Current_Planet = None
                     planet.kill()
+                effect_group.add(Explosion((stage.XScroll + self.rect.centerx, stage.YScroll + self.rect.centery)))
                 self.kill()
 
 

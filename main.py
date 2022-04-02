@@ -13,6 +13,7 @@ from star_obj import Stars
 from space_probe_obj import space_probe_group
 from radar_obj import radar_group, radar, radar_ping_group
 from missile_obj import missile_group, add_missile
+from effects import effect_group
 
 
 def HandleKeys():
@@ -82,6 +83,7 @@ myfont = pygame.font.SysFont("monospace", 16)  # setup font for text
 
 last_time = time.time()
 play.inventory.append('Radar')
+play.inventory.append('C4')
 while True:
     # Timing
     frame_time = time.time() - last_time
@@ -102,6 +104,7 @@ while True:
     radar_group.update()
     radar_ping_group.update()
     missile_group.update()
+    effect_group.update()
 
     # Visual
     stage.screen.fill('black')  # Fill the 'screen' surface with a solid color
@@ -111,6 +114,7 @@ while True:
     creature_group.draw(stage.screen)
     missile_group.draw(stage.screen)
     player_group.draw(stage.screen)
+    effect_group.draw(stage.screen)
     if map_selector.target:
         arrow_group.draw(stage.screen)
     MT.draw()  # Draw all Saved positions
@@ -128,7 +132,7 @@ while True:
     pop_up_group.draw(stage.screen)
 
     # Text
-    text = myfont.render(f"{map_selector.target}", True, (255, 255, 0))
+    text = myfont.render(f"{play.Current_Planet}", True, (255, 255, 0))
     stage.screen.blit(text, (5, 10))
     text2 = myfont.render(f"{round(frame_time * 1000)}ms", True, (255, 255, 0))
     stage.screen.blit(text2, (5, 25))

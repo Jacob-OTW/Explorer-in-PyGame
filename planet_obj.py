@@ -3,6 +3,7 @@ import pygame
 from settings import stage
 from player_obj import play
 from space_probe_obj import space_probe_group
+from effects import effect_group, Explosion
 
 
 def dis_to(mp, tp):
@@ -45,6 +46,8 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
             self.seen = False
         else:
             self.seen = True
+        self.kill_in = 300
+        self.should_kill = False
 
         # std values
         self.orbit_value = 0
@@ -93,6 +96,13 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
         if self.mask.overlap(play.mask, offset):  # If colliding with Planet
             if play.Current_Planet != self:
                 play.Current_Planet = self
+
+        if self.should_kill:
+            self.kill_in -= 1
+            if self.kill_in <= 0:
+                effect_group.add(Explosion((stage.XScroll + self.rect.centerx, stage.YScroll + self.rect.centery)))
+                play.Current_Planet = None
+                self.kill()
 
 
 planet_group = pygame.sprite.Group()

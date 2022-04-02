@@ -91,7 +91,7 @@ class Shop_UI(pygame.sprite.Sprite):
         self.cached_item = None  # used to delete items and such
         self.shop = False  # Is shop shown
         self.page = 0  # Page is used for the inventory and later prob. for selling and buying
-        self.usable_items = ['Item', 'Dead Skin', 'Probe']
+        self.usable_items = ['Item', 'Dead Skin', 'Probe', 'C4']
 
     def update(self):
         self.image = pygame.image.load('Assets/shop_ui.png').convert_alpha()
@@ -144,6 +144,13 @@ class Shop_UI(pygame.sprite.Sprite):
                             case 'Probe':
                                 add_probe()
                                 play.inventory.remove('Probe')
+                                self.directory.pop()
+                                return_inventory()
+                            case 'C4':
+                                if play.Current_Planet and 'Asteroid' in play.Current_Planet.status:
+                                    play.Current_Planet.should_kill = True
+                                    add_pop_up('C4 planted')
+                                    play.inventory.remove('C4')
                                 self.directory.pop()
                                 return_inventory()
 
