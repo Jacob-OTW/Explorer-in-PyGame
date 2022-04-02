@@ -12,6 +12,7 @@ from nav_objs import mimic_group, Mimic, map_selector_group, map_selector, map_u
 from star_obj import Stars
 from space_probe_obj import space_probe_group
 from radar_obj import radar_group, radar, radar_ping_group
+from missile_obj import missile_group, add_missile
 
 
 def HandleKeys():
@@ -43,6 +44,8 @@ def HandleKeys():
                     r = random.choice(radar_ping_group.sprites())
                     radar.lock = r.target
                     map_selector.set_target(r)
+            if event.key == pygame.K_q:
+                add_missile()
 
 
 class MouseTrail:  # This class is for debugging
@@ -78,7 +81,7 @@ for i in planet_group.sprites():
 myfont = pygame.font.SysFont("monospace", 16)  # setup font for text
 
 last_time = time.time()
-play.inventory.append('Probe')
+play.inventory.append('Radar')
 while True:
     # Timing
     frame_time = time.time() - last_time
@@ -98,6 +101,7 @@ while True:
     map_selector_group.update()
     radar_group.update()
     radar_ping_group.update()
+    missile_group.update()
 
     # Visual
     stage.screen.fill('black')  # Fill the 'screen' surface with a solid color
@@ -105,6 +109,7 @@ while True:
     space_probe_group.draw(stage.screen)
     planet_group.draw(stage.screen)  # Draw the planets
     creature_group.draw(stage.screen)
+    missile_group.draw(stage.screen)
     player_group.draw(stage.screen)
     if map_selector.target:
         arrow_group.draw(stage.screen)
