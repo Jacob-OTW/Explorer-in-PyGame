@@ -27,7 +27,7 @@ def dir_to(mp, tp):
 
 
 def semi_equal(value, match, accuracy):
-    if match - accuracy + 1 < value < match + accuracy +1:
+    if match - accuracy + 1 < value < match + accuracy + 1:
         return True
     else:
         return False
@@ -57,6 +57,8 @@ class Radar(pygame.sprite.Sprite):
         # Lock
         self.lock = None
 
+        self.scan_timer = 0
+
     def update(self):
         # Rotate
         self.radar_cursor = pygame.transform.rotate(pygame.image.load('Assets/Radar/radar_cursor.png').convert_alpha(),
@@ -70,13 +72,15 @@ class Radar(pygame.sprite.Sprite):
             self.cursor_angle = 0
 
         # Detect
-        for planet in planet_group.sprites():
-            angle = round(round_dir(dir_to(play.rect.center, planet.rect.center)))
-            dis = dis_to(play.rect.center, planet.rect.center)
-            if semi_equal(angle, round_dir(self.cursor_angle + 90), 5) and dis < 2500:
-                print(len(radar_ping_group.sprites()))
-                if len(radar_ping_group.sprites()) < 150:
-                    radar_ping_group.add(Radar_Ping(angle, dis, planet))
+        self.scan_timer += 1
+        if self.scan_timer % 5 == 0:
+            for planet in planet_group.sprites():
+                angle = round(round_dir(dir_to(play.rect.center, planet.rect.center)))
+                dis = dis_to(play.rect.center, planet.rect.center)
+                if semi_equal(angle, round_dir(self.cursor_angle + 90), 5) and dis < 2500:
+                    print(len(radar_ping_group.sprites()))
+                    if len(radar_ping_group.sprites()) < 25:
+                        radar_ping_group.add(Radar_Ping(angle, dis, planet))
 
         # Update Image
         self.image = pygame.Surface((200, 200), pygame.SRCALPHA, 32)
@@ -98,7 +102,7 @@ class Radar_Ping(pygame.sprite.Sprite):
         self.opacity = 255
 
     def update(self):
-        self.opacity -= 5
+        self.opacity -= 2.5
         if self.opacity < 0:
             self.kill()
         self.image.set_alpha(self.opacity)
