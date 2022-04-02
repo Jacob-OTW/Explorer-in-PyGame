@@ -48,7 +48,6 @@ class Radar(pygame.sprite.Sprite):
         self.radar_screen = pygame.image.load('Assets/Radar/radar_screen.png').convert_alpha()
         self.radar_screen_rect = self.radar_screen.get_rect(center=(100, 100))
         self.radar_cursor = pygame.image.load('Assets/Radar/radar_cursor.png').convert_alpha()
-        self.radar_cursor.set_alpha(150)
         self.radar_cursor_rect = self.radar_cursor.get_rect(center=(100, 100))
 
         # Angles
@@ -78,13 +77,13 @@ class Radar(pygame.sprite.Sprite):
                 angle = round(round_dir(dir_to(play.rect.center, planet.rect.center)))
                 dis = dis_to(play.rect.center, planet.rect.center)
                 if semi_equal(angle, round_dir(self.cursor_angle + 90), 5) and dis < 2500:
-                    print(len(radar_ping_group.sprites()))
                     if len(radar_ping_group.sprites()) < 25:
                         radar_ping_group.add(Radar_Ping(angle, dis, planet))
 
         # Update Image
         self.image = pygame.Surface((200, 200), pygame.SRCALPHA, 32)
         self.image.blit(self.radar_screen, self.radar_screen_rect)
+        self.radar_cursor.set_alpha(150)
         self.image.blit(self.radar_cursor, self.radar_cursor_rect)
 
 

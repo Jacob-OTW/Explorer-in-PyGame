@@ -99,7 +99,7 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
 planet_group = pygame.sprite.Group()
 planet_group.add(Planet(0, 70, status=['Static']))
 planet_group.add(
-    Planet(0, -130, xf=8, yf=-3, mass=0.005, orbit_speed=2, size=50, costume_num='3', buying={'Wood': 5, 'Steel': 10},
+    Planet(0, -130, xf=8, yf=-3, mass=0.005, orbit_speed=2, size=50, costume_num='3', buying={'Radar': 10, 'Wood': 5, 'Steel': 10},
            selling={'Wood': 3, 'Item': 10, 'Dead Skin': 15}, status=['Moving', 'Shop']))
 planet_group.add(Planet(0, -260, xf=8, yf=-3, mass=0.003, orbit_speed=4, size=50, costume_num='4', loot='Item',
                         status=['Moving', 'Loot'], chart='Item'))

@@ -39,7 +39,7 @@ def HandleKeys():
             if event.key == pygame.K_g:  # Cycle target for arrow and map
                 map_selector.next_target()
             if event.key == pygame.K_i:
-                if radar_ping_group.sprites():
+                if 'Radar' in play.inventory and radar_ping_group.sprites():
                     r = random.choice(radar_ping_group.sprites())
                     radar.lock = r.target
                     map_selector.set_target(r)
@@ -117,8 +117,9 @@ while True:
         if map_selector.target:
             map_selector_group.draw(stage.screen)
         mimic_group.draw(stage.screen)
-    radar_group.draw(stage.screen)
-    radar_ping_group.draw(stage.screen)
+    if 'Radar' in play.inventory:
+        radar_group.draw(stage.screen)
+        radar_ping_group.draw(stage.screen)
     pop_up_group.draw(stage.screen)
 
     # Text
