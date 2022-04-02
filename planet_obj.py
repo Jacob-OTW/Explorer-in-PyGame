@@ -77,11 +77,11 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.x, self.rect.y = (
             self.start[0] - stage.XScroll, self.start[1] - stage.YScroll)
-        if space_probe_group.sprites():
-            if dis_to(self.rect.center, space_probe_group.sprites()[0].rect.center) < 2000:
-                self.seen_by_probe = True
 
         if self.chart:
+            for probe in space_probe_group.sprites():
+                if dis_to(self.rect.center, probe.rect.center) < 2000:
+                    self.seen_by_probe = True
             if self.chart in play.inventory or self.seen_by_probe:
                 self.seen = True
             else:
