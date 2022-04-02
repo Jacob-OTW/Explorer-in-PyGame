@@ -4,6 +4,7 @@ from player_obj import play
 from pop_up_obj import add_pop_up
 from nav_objs import map_selector
 from space_probe_obj import add_probe
+from radar_obj import radar
 
 
 def return_main_menu():  # Returns main menu options
@@ -177,6 +178,7 @@ class Shop_UI(pygame.sprite.Sprite):
                         self.shop_list = return_main_menu()
                     case 'Clear Target':
                         map_selector.target = None
+                        radar.lock = None
             elif not play.Current_Planet or 'Shop' not in play.Current_Planet.status:
                 self.shop = False
                 self.shop_list = return_main_menu()

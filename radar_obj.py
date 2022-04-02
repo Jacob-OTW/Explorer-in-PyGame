@@ -26,6 +26,13 @@ def dir_to(mp, tp):
         return math.atan(x / y) * convert + 180
 
 
+def semi_equal(value, match, accuracy):
+    if match - accuracy + 1 < value < match + accuracy +1:
+        return True
+    else:
+        return False
+
+
 def dis_to(mp, tp):
     x = tp[0] - mp[0]
     y = tp[1] - mp[1]
@@ -41,36 +48,40 @@ class Radar(pygame.sprite.Sprite):
         self.radar_screen = pygame.image.load('Assets/Radar/radar_screen.png').convert_alpha()
         self.radar_screen_rect = self.radar_screen.get_rect(center=(100, 100))
         self.radar_cursor = pygame.image.load('Assets/Radar/radar_cursor.png').convert_alpha()
+        self.radar_cursor.set_alpha(150)
         self.radar_cursor_rect = self.radar_cursor.get_rect(center=(100, 100))
 
         # Angles
         self.cursor_angle = 0
+
+        # Lock
+        self.lock = None
 
     def update(self):
         # Rotate
         self.radar_cursor = pygame.transform.rotate(pygame.image.load('Assets/Radar/radar_cursor.png').convert_alpha(),
                                                     self.cursor_angle)
         self.radar_cursor_rect = self.radar_cursor.get_rect(center=(100, 100))
-        self.cursor_angle += 1
+        if not self.lock:
+            self.cursor_angle += 1
+        else:
+            self.cursor_angle = dir_to(play.rect.center, self.lock.rect.center) - 90
         if self.cursor_angle > 360:
             self.cursor_angle = 0
 
         # Detect
-        draws = []
         for planet in planet_group.sprites():
             angle = round(round_dir(dir_to(play.rect.center, planet.rect.center)))
             dis = dis_to(play.rect.center, planet.rect.center)
-            if angle == round_dir(self.cursor_angle + 90) and dis < 2500:
-                draws.append((angle, dis, planet))
+            if semi_equal(angle, round_dir(self.cursor_angle + 90), 5) and dis < 2500:
+                print(len(radar_ping_group.sprites()))
+                if len(radar_ping_group.sprites()) < 150:
+                    radar_ping_group.add(Radar_Ping(angle, dis, planet))
 
         # Update Image
         self.image = pygame.Surface((200, 200), pygame.SRCALPHA, 32)
         self.image.blit(self.radar_screen, self.radar_screen_rect)
         self.image.blit(self.radar_cursor, self.radar_cursor_rect)
-
-        # Draw pings
-        for draw in draws:
-            radar_ping_group.add(Radar_Ping(draw[0], draw[1], draw[2]))
 
 
 class Radar_Ping(pygame.sprite.Sprite):
@@ -87,7 +98,7 @@ class Radar_Ping(pygame.sprite.Sprite):
         self.opacity = 255
 
     def update(self):
-        self.opacity -= 1
+        self.opacity -= 5
         if self.opacity < 0:
             self.kill()
         self.image.set_alpha(self.opacity)

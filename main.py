@@ -1,3 +1,4 @@
+import random
 import pygame
 import sys
 import time
@@ -10,7 +11,7 @@ from shop_UI_obj import shop_ui_group, shop_ui, return_main_menu
 from nav_objs import mimic_group, Mimic, map_selector_group, map_selector, map_ui_group, map_ui, arrow_group
 from star_obj import Stars
 from space_probe_obj import space_probe_group
-from radar_obj import radar_group, radar_ping_group
+from radar_obj import radar_group, radar, radar_ping_group
 
 
 def HandleKeys():
@@ -37,6 +38,11 @@ def HandleKeys():
                 map_ui.map = False if map_ui.map else True
             if event.key == pygame.K_g:  # Cycle target for arrow and map
                 map_selector.next_target()
+            if event.key == pygame.K_i:
+                if radar_ping_group.sprites():
+                    r = random.choice(radar_ping_group.sprites())
+                    radar.lock = r.target
+                    map_selector.set_target(r)
 
 
 class MouseTrail:  # This class is for debugging
@@ -116,7 +122,7 @@ while True:
     pop_up_group.draw(stage.screen)
 
     # Text
-    text = myfont.render(f"{radar_group.sprites()[0].cursor_angle}", True, (255, 255, 0))
+    text = myfont.render(f"{map_selector.target}", True, (255, 255, 0))
     stage.screen.blit(text, (5, 10))
     text2 = myfont.render(f"{round(frame_time * 1000)}ms", True, (255, 255, 0))
     stage.screen.blit(text2, (5, 25))

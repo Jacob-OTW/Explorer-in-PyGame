@@ -100,6 +100,14 @@ class Map_Selector(pygame.sprite.Sprite):
                 map_selector.target_index = 1
         map_selector.target = map_selector.possible[map_selector.target_index]
 
+    @classmethod
+    def set_target(cls, obj):
+        a = obj.target
+        for i in mimic_group.sprites():
+            if i.target == a:
+                map_selector.possible.append(i)
+                map_selector.target = i
+
 
 map_selector_group = pygame.sprite.GroupSingle()
 map_selector = Map_Selector()
