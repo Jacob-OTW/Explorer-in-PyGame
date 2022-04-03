@@ -59,14 +59,19 @@ class Radar(pygame.sprite.Sprite):
         self.scan_timer = 0
 
     def update(self):
+        # Drop Lock
+        if self.lock and not self.lock.alive():
+            self.lock = None
         # Rotate
         self.radar_cursor = pygame.transform.rotate(pygame.image.load('Assets/Radar/radar_cursor.png').convert_alpha(),
                                                     self.cursor_angle)
         self.radar_cursor_rect = self.radar_cursor.get_rect(center=(100, 100))
+
         if not self.lock:
             self.cursor_angle += 1
         else:
             self.cursor_angle = dir_to(play.rect.center, self.lock.rect.center) - 90
+
         if self.cursor_angle > 360:
             self.cursor_angle = 0
 

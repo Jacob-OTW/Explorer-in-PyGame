@@ -14,6 +14,7 @@ from space_probe_obj import space_probe_group
 from radar_obj import radar_group, radar, radar_ping_group
 from missile_obj import missile_group, add_missile
 from effects import effect_group
+from key_binds import keybinds
 
 
 def HandleKeys():
@@ -22,27 +23,28 @@ def HandleKeys():
             pygame.quit()
             sys.exit()
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:  # Cycle through menu up
+            if event.key == keybinds['Menu_Up']:  # Cycle through menu up
                 shop_ui.selected -= 1
                 if shop_ui.selected < 0:
                     shop_ui.selected = shop_ui.max_shop_length
-            if event.key == pygame.K_DOWN:  # Cycle through menu down
+            if event.key == keybinds['Menu_Down']:  # Cycle through menu down
                 shop_ui.selected += 1
                 if shop_ui.selected > shop_ui.max_shop_length:
                     shop_ui.selected = 0
-            if event.key == pygame.K_RETURN:  # Confirm Action in Shop UI
+            if event.key == keybinds['Menu_Confirm']:  # Confirm Action in Shop UI
                 shop_ui.use()
-            if event.key == pygame.K_e:  # Open Shop_UI
+            if event.key == keybinds['Open_Menu']:  # Open Shop_UI
                 shop_ui.shop = True
                 shop_ui.directory = []
                 shop_ui.shop_list = return_main_menu()
-            if event.key == pygame.K_m:  # Open and close map
+            if event.key == keybinds['Open_Map']:  # Open and close map
                 map_ui.map = False if map_ui.map else True
-            if event.key == pygame.K_g:  # Cycle target for arrow and map
+            if event.key == keybinds['Cycle_Map']:  # Cycle target for arrow and map
                 map_selector.next_target()
-            if event.key == pygame.K_i:
+            if event.key == keybinds['Lock_Radar']:  # Lock radar
                 if 'Radar' in play.inventory and radar_ping_group.sprites():
                     r = random.choice(radar_ping_group.sprites())
+                    r.target.seen_by_probe = True
                     radar.lock = r.target
                     map_selector.set_target(r)
             if event.key == pygame.K_q:
@@ -132,7 +134,7 @@ while True:
     pop_up_group.draw(stage.screen)
 
     # Text
-    text = myfont.render(f"{play.Current_Planet}", True, (255, 255, 0))
+    text = myfont.render(f"", True, (255, 255, 0))
     stage.screen.blit(text, (5, 10))
     text2 = myfont.render(f"{round(frame_time * 1000)}ms", True, (255, 255, 0))
     stage.screen.blit(text2, (5, 25))

@@ -4,6 +4,7 @@ from settings import stage
 from player_obj import play
 from space_probe_obj import space_probe_group
 from effects import effect_group, Explosion
+from nav_objs import map_selector
 
 
 def dis_to(mp, tp):
@@ -102,6 +103,7 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
             if self.kill_in <= 0:
                 effect_group.add(Explosion((stage.XScroll + self.rect.centerx, stage.YScroll + self.rect.centery)))
                 play.Current_Planet = None
+                map_selector.target = None
                 self.kill()
 
 

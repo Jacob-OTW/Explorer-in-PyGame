@@ -84,6 +84,8 @@ class Map_Selector(pygame.sprite.Sprite):
             Map_Selector.next_target()
         if self.possible and self.target:
             self.rect.center = self.target.rect.center
+        if self.target and not self.target.alive():
+            self.target = None
 
     @classmethod
     def next_target(cls):

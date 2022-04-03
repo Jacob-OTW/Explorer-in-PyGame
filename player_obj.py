@@ -1,6 +1,7 @@
 import pygame
 import math
 from settings import stage
+from key_binds import keybinds
 
 
 class Player(pygame.sprite.Sprite):  # This class is used for the player
@@ -45,17 +46,17 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
         self.Surface.blit(self.Idle, (0, 0))
         # Key Input
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_SPACE]:
+        if keys[keybinds['Thrust']]:
             self.Surface.blit(self.burner[self.burner_index], (0, 0))
             self.burner_timer += 1
             if self.burner_timer >= 5:
                 self.burner_index = 0 if self.burner_index == 1 else 1
                 self.burner_timer = 0
             self.accelerate()
-        if keys[pygame.K_a]:
-            self.rotate(5)
-        if keys[pygame.K_d]:
+        if keys[keybinds['Turn_Left']]:
             self.rotate(-5)
+        if keys[keybinds['Turn_Right']]:
+            self.rotate(5)
 
         # Release from Planet
         if self.Current_Planet:
