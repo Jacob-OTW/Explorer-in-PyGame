@@ -75,9 +75,9 @@ MT = MouseTrail()  # Create Mouse trail object for debugging
 
 Stars.addstars()  # Add the 4 background tiles
 
-mimic_group.add(Mimic(play, is_player=True))  # Add mimics for all objects
-
 myfont = pygame.font.SysFont("monospace", 16)  # setup font for text
+
+mimic_group.add(Mimic(play, is_player=True))
 
 last_time = time.time()
 play.inventory.append('Radar')
@@ -130,10 +130,12 @@ while True:
     pop_up_group.draw(stage.screen)
 
     # Text
-    text = myfont.render(f"", True, (255, 255, 0))
+    text = myfont.render(f"{len(map_selector.possible)}", True, (255, 255, 0))
     stage.screen.blit(text, (5, 10))
-    text2 = myfont.render(f"{round(frame_time * 1000)}ms", True, (255, 255, 0))
+    text2 = myfont.render(f"{map_selector.target_index} {round(frame_time * 1000)}ms", True, (255, 255, 0))
     stage.screen.blit(text2, (5, 25))
+    text3 = myfont.render(f"{map_selector.target}", True, (255, 255, 0))
+    stage.screen.blit(text3, (5, 40))
 
     # Update
     pygame.display.flip()

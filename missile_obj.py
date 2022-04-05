@@ -57,14 +57,14 @@ class Missile(pygame.sprite.Sprite):
             self.kill()
 
         # Tracking
+        convert = 360 / (math.pi * 2)
         if self.target:
-            convert = 360 / (math.pi * 2)
             x = self.target.rect.centerx + ((dis_to(self.rect.center, self.target.rect.center) / self.speed) * self.target.XF)
             y = self.target.rect.centery + ((dis_to(self.rect.center, self.target.rect.center) / self.speed) * self.target.YF)
             predict = (x, y)
             self.angle = dir_to(self.rect.center, predict) - 90
-            self.start = (
-                self.start[0] + (math.cos(self.angle / convert) * self.speed), self.start[1] - math.sin(self.angle / convert) * self.speed)
+        self.start = (
+            self.start[0] + (math.cos(self.angle / convert) * self.speed), self.start[1] - math.sin(self.angle / convert) * self.speed)
 
         # Collision
         for planet in planet_group.sprites():

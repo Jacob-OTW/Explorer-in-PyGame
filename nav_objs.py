@@ -89,17 +89,20 @@ class Map_Selector(pygame.sprite.Sprite):
 
     @classmethod
     def next_target(cls):
+        # Set possible to all mimic that are on the map
         a = []
         for i in mimic_group.sprites():
-            if i.target.seen:
+            if i.target.seen and not i.player:
                 a.append(i)
         map_selector.possible = a
-        if not map_selector.target:
-            map_selector.target = a[0]
-        else:
+
+        # Set a target if not target is set.
+        if map_selector.target:
             map_selector.target_index += 1
             if map_selector.target_index > len(a) - 1:
-                map_selector.target_index = 1
+                map_selector.target_index = 0
+        if len(map_selector.possible) <= map_selector.target_index:
+            map_selector.target_index = len(map_selector.possible) - 1
         map_selector.target = map_selector.possible[map_selector.target_index]
 
     @classmethod
