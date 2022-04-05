@@ -2,7 +2,7 @@ import pygame
 import math
 from settings import stage
 from player_obj import play
-from planet_obj import planet_group
+from planet_obj import planet_group, Planet
 from radar_obj import radar
 from nav_objs import Mimic, mimic_group
 from effects import effect_group, Explosion
@@ -72,6 +72,8 @@ class Missile(pygame.sprite.Sprite):
             if self.mask.overlap(planet.mask, offset):
                 if 'Asteroid' in planet.status:
                     play.Current_Planet = None
+                    planet_group.add(Planet(100, 100, xf=3.2, yf=2.1, costume_num='asteroid', loot='Item_A',
+                                            status=['Asteroid', 'Loot']))
                     planet.kill()
                 effect_group.add(Explosion((stage.XScroll + self.rect.centerx, stage.YScroll + self.rect.centery)))
                 self.kill()

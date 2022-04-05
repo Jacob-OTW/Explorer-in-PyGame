@@ -76,10 +76,6 @@ MT = MouseTrail()  # Create Mouse trail object for debugging
 Stars.addstars()  # Add the 4 background tiles
 
 mimic_group.add(Mimic(play, is_player=True))  # Add mimics for all objects
-for i in creature_group.sprites():
-    mimic_group.add(Mimic(i))
-for i in planet_group.sprites():
-    mimic_group.add(Mimic(i))
 
 myfont = pygame.font.SysFont("monospace", 16)  # setup font for text
 

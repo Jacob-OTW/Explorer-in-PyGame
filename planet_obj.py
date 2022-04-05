@@ -4,7 +4,7 @@ from settings import stage
 from player_obj import play
 from space_probe_obj import space_probe_group
 from effects import effect_group, Explosion
-from nav_objs import map_selector
+from nav_objs import map_selector, Mimic, mimic_group
 
 
 def dis_to(mp, tp):
@@ -52,6 +52,9 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
 
         # std values
         self.orbit_value = 0
+
+        # Mimic
+        mimic_group.add(Mimic(self))
 
     def update(self):
         if 'Static' in self.status:  # Things to do if Static
@@ -104,6 +107,9 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
                 effect_group.add(Explosion((stage.XScroll + self.rect.centerx, stage.YScroll + self.rect.centery)))
                 play.Current_Planet = None
                 map_selector.target = None
+                if 'Asteroid' in self.status:
+                    planet_group.add(Planet(100, 100, xf=3.2, yf=2.1, costume_num='asteroid', loot='Item_A',
+                                            status=['Asteroid', 'Loot']))
                 self.kill()
 
 

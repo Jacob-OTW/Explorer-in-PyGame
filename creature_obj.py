@@ -3,6 +3,7 @@ import math
 import random
 from settings import stage
 from player_obj import play
+from nav_objs import Mimic, mimic_group
 
 
 class Creature(pygame.sprite.Sprite):
@@ -18,6 +19,7 @@ class Creature(pygame.sprite.Sprite):
         self.timer = 0
         self.loot = 'Dead Skin'
         self.seen = True
+        mimic_group.add(Mimic(self))
 
     def update(self):
         self.cycle_animation()

@@ -6,12 +6,12 @@ from player_obj import play
 
 class Stars:  # This class is used for the background tiles
     StarList = []  # Objects are added to this list
-    test_img = pygame.image.load('Assets/BG/BG1.png').convert_alpha()  # Stored value for weight and height
+    test_img = pygame.transform.scale(pygame.image.load(f'Assets/BG/BG{random.randint(1, 3)}.png').convert_alpha(), (stage.SCREEN_WIDTH, stage.SCREEN_HEIGHT))
 
     @classmethod
     def randomBG(cls):
         # Returns one of the random images for the Background
-        return pygame.image.load(f'Assets/BG/BG{random.randint(1, 3)}.png').convert_alpha()
+        return pygame.transform.scale(pygame.image.load(f'Assets/BG/BG{random.randint(1, 3)}.png').convert_alpha(), (stage.SCREEN_WIDTH, stage.SCREEN_HEIGHT))
 
     @classmethod
     def draw(cls):

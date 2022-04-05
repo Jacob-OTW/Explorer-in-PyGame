@@ -4,8 +4,8 @@ import pygame
 # This file exists so there isn't a circular import
 class stage:
     pygame.init()
-    SCREEN_WIDTH = 960
-    SCREEN_HEIGHT = 720
+    SCREEN_WIDTH = 1600  # 960
+    SCREEN_HEIGHT = 800  # 720
     World_Size_X = 50000
     World_Size_Y = 20000
 
