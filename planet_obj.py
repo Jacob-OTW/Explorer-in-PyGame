@@ -1,5 +1,6 @@
 import math
 import pygame
+import random
 from settings import stage
 from player_obj import play
 from space_probe_obj import space_probe_group
@@ -14,7 +15,8 @@ def dis_to(mp, tp):
 
 
 class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kind
-    def __init__(self, x, y, xf=0.0, yf=0.0, status=None, size=100, orbit_speed=10, mass=0.01, loot=None, costume_num='1',
+    def __init__(self, x, y, force=(0, 0), status=None, size=100, orbit_speed=10, mass=0.01, loot=None,
+                 costume_num='1',
                  buying=None, selling=None, chart=None):
         super().__init__()
         if status is None:
@@ -32,8 +34,8 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
 
         # Set values
         self.start = (x, y)
-        self.XF = xf
-        self.YF = yf
+        self.XF = force[0]
+        self.YF = force[1]
         self.status = status
         self.size = size
         self.orbit_speed = orbit_speed
@@ -108,16 +110,46 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
                 play.Current_Planet = None
                 map_selector.target = None
                 if 'Asteroid' in self.status:
-                    planet_group.add(Planet(100, 100, xf=3.2, yf=2.1, costume_num='asteroid', loot='Item_A',
+                    planet_group.add(Planet(100, 100, costume_num='asteroid', loot='Item_A',
                                             status=['Asteroid', 'Loot']))
                 self.kill()
 
 
+def create_planet_system(num, pos):
+    systems = {
+        0: [
+            Planet(pos[0], pos[1] + 70, status=['Static']),
+            Planet(pos[0], pos[1] + -130, mass=0.005, orbit_speed=2, size=50, costume_num='3',
+                   buying={'Map-C1': 10, 'Tracker': 10, 'Fuel Upgrade': 5},
+                   selling={'Nemon Rock': 5, 'Japur Rock': 15, 'Japur Dust': 10, 'Dead Skin': 10, 'Wierd Rock': 10,
+                            'Crude Oil': 75, 'Old DNA': 15},
+                   status=['Moving', 'Shop']),
+            Planet(pos[0], pos[1] + -260, mass=0.003, orbit_speed=4, size=50, costume_num='4', loot='Nemon Rock',
+                   status=['Moving', 'Loot'])
+        ],
+        1: [
+            Planet(pos[0], pos[1] + 70, status=['Static'], chart='Map-C1'),
+            Planet(pos[0], pos[1] - 25, mass=0.005, orbit_speed=2, size=50, costume_num='3',
+                   buying={'Map-C2': 25, 'Probe': 15, 'Radar': 20, 'Gas Can': 10, 'Crude Oil': 50, 'Missile': 30},
+                   selling={'Nemon Rock': 15, 'Japur Rock': 5, 'Japur Dust': 5, 'Dead Skin': 15, 'Ice': 5, 'Flag': 20},
+                   status=['Moving', 'Shop'], chart='Map-C1'),
+            Planet(pos[0], pos[1] + -260, mass=0.0025, orbit_speed=4, size=50, costume_num='4', loot='Japur Rock',
+                   status=['Moving', 'Loot'], chart='Map-C1'),
+            Planet(pos[0], pos[1] + -350, mass=0.002, orbit_speed=-4, size=50, costume_num='4', loot='Japur Dust',
+                   status=['Moving', 'Loot'], chart='Map-C1')
+        ],
+        2: [
+            Planet(pos[0], pos[1] + 70, status=['Static'], chart='Map-C2'),
+            Planet(pos[0], pos[1] - 70, mass=0.005, orbit_speed=5, size=50, costume_num='2', status=['Moving'], chart='Map-C2'),
+            Planet(pos[0], pos[1] - 200, mass=0.0018, orbit_speed=2, size=50, costume_num='2', status=['Moving'], chart='Map-C2'),
+        ]
+    }
+    for planet in systems[num]:
+        planet_group.add(planet)
+
+
 planet_group = pygame.sprite.Group()
-planet_group.add(Planet(0, 70, status=['Static']))
-planet_group.add(
-    Planet(0, -130, xf=8, yf=-3, mass=0.005, orbit_speed=2, size=50, costume_num='3', buying={'Radar': 10, 'Wood': 5, 'Steel': 10},
-           selling={'Wood': 3, 'Item': 10, 'Dead Skin': 15}, status=['Moving', 'Shop']))
-planet_group.add(Planet(0, -260, xf=8, yf=-3, mass=0.003, orbit_speed=4, size=50, costume_num='4', loot='Item',
-                        status=['Moving', 'Loot'], chart='Item'))
-planet_group.add(Planet(100, 100, xf=3.2, yf=2.1, costume_num='asteroid', loot='Item_A', status=['Asteroid', 'Loot']))
+create_planet_system(0, (random.randint(-18000, 18000), random.uniform(-8000, 8000)))
+create_planet_system(1, (random.randint(-18000, 18000), random.uniform(-8000, 8000)))
+create_planet_system(2, (random.randint(-18000, 18000), random.uniform(-8000, 8000)))
+planet_group.add(Planet(100, 100, force=(2.4, 2.4), costume_num='asteroid', loot='Item_A', status=['Asteroid', 'Loot']))
