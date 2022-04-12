@@ -72,8 +72,7 @@ class Missile(pygame.sprite.Sprite):
             if self.mask.overlap(planet.mask, offset):
                 if 'Asteroid' in planet.status:
                     play.Current_Planet = None
-                    planet_group.add(Planet(100, 100, force=(3.2, 2.1), costume_num='asteroid', loot='Item_A',
-                                            status=['Asteroid', 'Loot']))
+                    planet.reconstruct()
                     planet.kill()
                 effect_group.add(Explosion((stage.XScroll + self.rect.centerx, stage.YScroll + self.rect.centery)))
                 self.kill()

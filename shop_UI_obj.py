@@ -91,7 +91,7 @@ class Shop_UI(pygame.sprite.Sprite):
         self.cached_item = None  # used to delete items and such
         self.shop = False  # Is shop shown
         self.page = 0  # Page is used for the inventory and later prob. for selling and buying
-        self.usable_items = ['Item', 'Dead Skin', 'Probe', 'C4']
+        self.usable_items = ['Probe', 'C4']
 
     def update(self):
         self.image = pygame.image.load('Assets/shop_ui.png').convert_alpha()
@@ -137,10 +137,6 @@ class Shop_UI(pygame.sprite.Sprite):
                             return_inventory()
                     elif choice == 'Use':
                         match self.cached_item:
-                            case 'Item':
-                                print('Yes')
-                            case 'Dead Skin':
-                                print('No')
                             case 'Probe':
                                 add_probe()
                                 play.inventory.remove('Probe')

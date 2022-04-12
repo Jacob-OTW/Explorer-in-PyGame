@@ -15,7 +15,7 @@ def dis_to(mp, tp):
 
 
 class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kind
-    def __init__(self, x, y, force=(0, 0), status=None, size=100, orbit_speed=10, mass=0.01, loot=None,
+    def __init__(self, x, y, force=(0.0, 0.0), status=None, size=100, orbit_speed=10, mass=0.01, loot=None,
                  costume_num='1',
                  buying=None, selling=None, chart=None):
         super().__init__()
@@ -57,6 +57,12 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
 
         # Mimic
         mimic_group.add(Mimic(self))
+
+    def reconstruct(self):
+        x1 = random.randint(-18000, 18000)
+        y1 = random.randint(-8000, 8000)
+        v = random.uniform(-5, 5), random.uniform(-5, 5)
+        planet_group.add(Planet(x1, y1, force=v, costume_num='asteroid', status=['Asteroid', 'Loot'], loot=self.loot))
 
     def update(self):
         if 'Static' in self.status:  # Things to do if Static
@@ -110,8 +116,7 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
                 play.Current_Planet = None
                 map_selector.target = None
                 if 'Asteroid' in self.status:
-                    planet_group.add(Planet(100, 100, costume_num='asteroid', loot='Item_A',
-                                            status=['Asteroid', 'Loot']))
+                    self.reconstruct()
                 self.kill()
 
 
@@ -143,7 +148,7 @@ def create_planet_system(num, pos):
             Planet(pos[0], pos[1] - 70, mass=0.005, orbit_speed=5, size=50, costume_num='2', status=['Moving'], chart='Map-C2'),
             Planet(pos[0], pos[1] - 200, mass=0.0018, orbit_speed=2, size=50, costume_num='2', status=['Moving'], chart='Map-C2'),
         ]
-    }
+                }
     for planet in systems[num]:
         planet_group.add(planet)
 
