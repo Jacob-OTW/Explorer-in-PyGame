@@ -91,7 +91,7 @@ class Shop_UI(pygame.sprite.Sprite):
         self.cached_item = None  # used to delete items and such
         self.shop = False  # Is shop shown
         self.page = 0  # Page is used for the inventory and later prob. for selling and buying
-        self.usable_items = ['Probe', 'C4']
+        self.usable_items = ['Probe', 'C4']  # If an item is in this list there will be a "use" option when you select it
 
     def update(self):
         self.image = pygame.image.load('Assets/shop_ui.png').convert_alpha()

@@ -80,9 +80,6 @@ myfont = pygame.font.SysFont("monospace", 16)  # setup font for text
 mimic_group.add(Mimic(play, is_player=True))
 
 last_time = time.time()
-play.inventory.append('Radar')
-play.inventory.append('C4')
-play.inventory.append('Probe')
 while True:
     # Timing
     frame_time = time.time() - last_time
