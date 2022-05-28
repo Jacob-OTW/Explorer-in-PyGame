@@ -1,5 +1,4 @@
-import pygame
-from settings import stage
+from settings import *
 
 
 def add_pop_up(*args: str):  # Creates pop-ups

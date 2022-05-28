@@ -1,6 +1,4 @@
-import pygame
-import math
-from settings import stage
+from settings import *
 from key_binds import keybinds
 
 
@@ -14,7 +12,8 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
         self.Surface = pygame.Surface((90, 52), pygame.SRCALPHA, 32)
         self.Idle = pygame.image.load('Assets/Ship.png').convert()
         self.Idle.set_colorkey((0, 0, 0))
-        self.burner = {0: pygame.image.load('Assets/burner0.png').convert_alpha(), 1: pygame.image.load('Assets/burner1.png').convert_alpha()}
+        self.burner = {0: pygame.image.load('Assets/burner0.png').convert_alpha(),
+                       1: pygame.image.load('Assets/burner1.png').convert_alpha()}
         self.burner_index = 0
         self.burner_timer = 0
 
@@ -40,7 +39,7 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
         self.inventory = []
         self.money = 10
 
-    def update(self):
+    def update(self, planet_group: list):
         self.Surface = pygame.Surface((90, 52), pygame.SRCALPHA, 32)
         self.Surface.blit(self.Idle, (0, 0))
         # Key Input
@@ -86,7 +85,12 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
         self.lander_img = pygame.transform.rotate(pygame.image.load('Assets/Lander.png').convert_alpha(), self.angle)
         self.mask = pygame.mask.from_surface(self.lander_img)
 
-    def draw_mask_attach(self):  # Draws the hitbox at the bottom of player for debugging
+        for obj in self.overlaps_with(planet_group):
+            keys = pygame.key.get_pressed()
+            if not keys[pygame.K_SPACE]:
+                self.Current_Planet = obj
+
+    def draw_mask_attach(self):  # Draws the hit_box at the bottom of player for debugging
         olist = self.mask.outline()
         img = pygame.Surface([640, 480], pygame.SRCALPHA, 32).convert_alpha()
         pygame.draw.lines(img, (200, 150, 150), True, olist)
@@ -94,6 +98,14 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
 
     def rotate(self, r):  # change the rotation value and render a new img
         self.angle += r
+
+    def overlaps_with(self, group: pygame.sprite.AbstractGroup):
+        col = pygame.sprite.spritecollide(self, group, False)
+        overlapping = []
+        for obj in col:
+            if self.mask.overlap(obj.mask, (obj.rect.x - self.rect.x, obj.rect.y - self.rect.y)):
+                overlapping.append(obj)
+        return overlapping
 
     def accelerate(self):  # Convert is needed because math.sin and math.cos work in radian instead of degrees
         x = math.cos(math.radians(self.angle)) * 0.1
@@ -103,5 +115,4 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
 
 
 play = Player()  # Create player
-player_group = pygame.sprite.GroupSingle()
-player_group.add(play)
+player_group = pygame.sprite.GroupSingle(play)

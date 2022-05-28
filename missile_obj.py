@@ -1,6 +1,6 @@
 import pygame
 import math
-from settings import stage
+from settings import *
 from player_obj import play
 from planet_obj import planet_group
 from radar_obj import radar
@@ -12,24 +12,6 @@ def add_missile():
     missile_group.add(
         Missile((stage.XScroll + play.rect.centerx, stage.YScroll + play.rect.centery)))
     mimic_group.add(Mimic(missile_group.sprites()[-1]))
-
-
-def dis_to(mp, tp):
-    x = tp[0] - mp[0]
-    y = tp[1] - mp[1]
-    return math.sqrt(x ** 2 + y ** 2)
-
-
-def dir_to(mp, tp):
-    convert = 57.29577951
-    x = tp[0] - mp[0]
-    y = tp[1] - mp[1]
-    if y == 0:
-        return 90 if x > 0 else 270
-    if y > 0:
-        return (math.atan(x / y)) * convert
-    else:
-        return math.atan(x / y) * convert + 180
 
 
 class Missile(pygame.sprite.Sprite):

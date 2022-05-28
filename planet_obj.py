@@ -1,17 +1,11 @@
 import math
 import pygame
 import random
-from settings import stage
+from settings import *
 from player_obj import play
 from space_probe_obj import space_probe_group
 from effects import effect_group, Explosion
 from nav_objs import map_selector, Mimic, mimic_group
-
-
-def dis_to(mp, tp):
-    x = tp[0] - mp[0]
-    y = tp[1] - mp[1]
-    return math.sqrt(x ** 2 + y ** 2)
 
 
 class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kind
@@ -67,7 +61,8 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
         if 'Static' in self.status:  # Things to do if Static
             pass
         if 'Moving' in self.status:  # Things to do if Moving
-            self.force = pygame.math.Vector2(math.cos(self.orbit_value) * self.orbit_speed, math.sin(self.orbit_value) * self.orbit_speed)
+            self.force = pygame.math.Vector2(math.cos(self.orbit_value) * self.orbit_speed,
+                                             math.sin(self.orbit_value) * self.orbit_speed)
             self.orbit_value += self.mass * self.orbit_speed
             self.start += self.force
 
@@ -81,7 +76,7 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
             if play.Current_Planet == self:
                 if self.loot not in play.inventory:
                     play.inventory.append(self.loot)
-        stage.loop(self)
+        loop(self)
 
         self.image = pygame.transform.scale(self.stored, (self.size, self.size))
         self.mask = pygame.mask.from_surface(self.image)
@@ -98,12 +93,6 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
                 self.seen = False
         else:
             self.seen = True
-
-        # Setup for Mask collision test
-        offset = (play.rect.x - self.rect.x, play.rect.y - self.rect.y)
-        if self.mask.overlap(play.mask, offset):  # If colliding with Planet
-            if play.Current_Planet != self:
-                play.Current_Planet = self
 
         if self.should_kill:
             self.kill_in -= 1
@@ -141,10 +130,12 @@ def create_planet_system(num, pos):
         ],
         2: [
             Planet(pos[0], pos[1] + 70, status=['Static'], chart='Map-C2'),
-            Planet(pos[0], pos[1] - 70, mass=0.005, orbit_speed=5, size=50, costume_num='2', status=['Moving'], chart='Map-C2'),
-            Planet(pos[0], pos[1] - 200, mass=0.0018, orbit_speed=2, size=50, costume_num='2', status=['Moving'], chart='Map-C2'),
+            Planet(pos[0], pos[1] - 70, mass=0.005, orbit_speed=5, size=50, costume_num='2', status=['Moving'],
+                   chart='Map-C2'),
+            Planet(pos[0], pos[1] - 200, mass=0.0018, orbit_speed=2, size=50, costume_num='2', status=['Moving'],
+                   chart='Map-C2'),
         ]
-                }
+    }
     for planet in systems[num]:
         planet_group.add(planet)
 

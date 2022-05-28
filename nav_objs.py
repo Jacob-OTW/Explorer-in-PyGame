@@ -1,19 +1,5 @@
-import pygame
-import math
-from settings import stage
+from settings import *
 from player_obj import play
-
-
-def dir_to(mp, tp):
-    convert = 57.29577951
-    x = tp[0] - mp[0]
-    y = tp[1] - mp[1]
-    if y == 0:
-        return 90 if x > 0 else 270
-    if y > 0:
-        return (math.atan(x / y)) * convert
-    else:
-        return math.atan(x / y) * convert + 180
 
 
 class Mimic(pygame.sprite.Sprite):

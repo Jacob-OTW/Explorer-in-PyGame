@@ -1,6 +1,4 @@
-import pygame
-import random
-from settings import stage
+from settings import *
 from player_obj import play
 
 

@@ -1,5 +1,4 @@
-import pygame
-from settings import stage
+from settings import *
 from player_obj import play
 from nav_objs import mimic_group, Mimic
 

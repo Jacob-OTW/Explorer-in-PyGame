@@ -1,16 +1,10 @@
 import pygame
 import math
 import random
-from settings import stage
+from settings import *
 from player_obj import play
 from space_probe_obj import space_probe_group
 from nav_objs import Mimic, mimic_group
-
-
-def dis_to(mp, tp):
-    x = tp[0] - mp[0]
-    y = tp[1] - mp[1]
-    return math.sqrt(x ** 2 + y ** 2)
 
 
 class Creature(pygame.sprite.Sprite):
@@ -31,7 +25,7 @@ class Creature(pygame.sprite.Sprite):
     def update(self):
         self.cycle_animation()
         self.start += self.force
-        stage.loop(self)
+        loop(self)
         self.force *= 98 / 100
         self.image = pygame.transform.rotate(pygame.image.load(f'Assets/Creature/{round(self.animation_index)}.png'),
                                              self.angle - 90)

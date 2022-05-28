@@ -1,42 +1,6 @@
-import pygame
-import math
-from settings import stage
+from settings import *
 from planet_obj import planet_group
 from player_obj import play
-
-
-def round_dir(x):
-    while x > 360 or x < 0:
-        if x > 360:
-            x -= 360
-        if x < 0:
-            x += 360
-    return x
-
-
-def dir_to(mp, tp):
-    convert = 57.29577951
-    x = tp[0] - mp[0]
-    y = tp[1] - mp[1]
-    if y == 0:
-        return 90 if x > 0 else 270
-    if y > 0:
-        return (math.atan(x / y)) * convert
-    else:
-        return math.atan(x / y) * convert + 180
-
-
-def semi_equal(value, match, accuracy):
-    if match - accuracy + 1 < value < match + accuracy + 1:
-        return True
-    else:
-        return False
-
-
-def dis_to(mp, tp):
-    x = tp[0] - mp[0]
-    y = tp[1] - mp[1]
-    return math.sqrt(x ** 2 + y ** 2)
 
 
 class Radar(pygame.sprite.Sprite):
@@ -62,7 +26,8 @@ class Radar(pygame.sprite.Sprite):
         # Drop Lock
         if self.lock and not self.lock.alive():
             self.lock = None
-        # Rotate
+
+        # Rotate image
         self.radar_cursor = pygame.transform.rotate(pygame.image.load('Assets/Radar/radar_cursor.png').convert_alpha(),
                                                     self.cursor_angle)
         self.radar_cursor_rect = self.radar_cursor.get_rect(center=(100, 100))
@@ -75,9 +40,9 @@ class Radar(pygame.sprite.Sprite):
         if self.cursor_angle > 360:
             self.cursor_angle = 0
 
-        # Detect
+        # Detect planets and create radar ping
         self.scan_timer += 1
-        for planet in stage.split(planet_group.sprites(), 5, self.scan_timer % 5):  # Spread workload over 5 cycles.
+        for planet in split(planet_group.sprites(), 5, self.scan_timer % 5):  # Spread workload over 5 cycles.
             angle = round(round_dir(dir_to(play.rect.center, planet.rect.center)))
             dis = dis_to(play.rect.center, planet.rect.center)
             if semi_equal(angle, round_dir(self.cursor_angle + 90), 5) and dis < 2500:

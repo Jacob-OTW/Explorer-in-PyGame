@@ -1,8 +1,4 @@
-import random
-import pygame
-import sys
-import time
-from settings import stage
+from settings import *
 from player_obj import player_group, play
 from planet_obj import planet_group
 from creature_obj import creature_group
@@ -90,7 +86,7 @@ while True:
     # Events
     handle_keys()  # Check if game quit or Keys were pressed
     MT.check()  # Check if mouse button is down
-    player_group.update()
+    player_group.update(planet_group)
     arrow_group.update()
     planet_group.update()
     creature_group.update()
@@ -131,7 +127,7 @@ while True:
     pop_up_group.draw(stage.screen)
 
     # Text
-    text = my_font.render(f"{round(frame_time * 1000)}ms", True, (255, 255, 0))
+    text = my_font.render(f"{round(frame_time * 1000)}ms :: {len(radar_ping_group.sprites())}", True, (255, 255, 0))
     stage.screen.blit(text, (5, 10))
 
     # Update
