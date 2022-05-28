@@ -1,5 +1,5 @@
 import pygame
-from settings import stage
+from settings import *
 
 
 class Explosion(pygame.sprite.Sprite):
@@ -10,13 +10,13 @@ class Explosion(pygame.sprite.Sprite):
         self.start = pos
         self.image = pygame.transform.scale(self.stored,
                                             (self.stored.get_width() * self.size, self.stored.get_height() * self.size))
-        self.rect = self.image.get_rect(center=(self.start[0] - stage.XScroll, self.start[1] - stage.YScroll))
+        self.rect = self.image.get_rect(center=(self.start[0] - Stage.XScroll, self.start[1] - Stage.YScroll))
         self.opacity = 255
 
     def update(self):
         self.image = pygame.transform.scale(self.stored,
                                             (self.stored.get_width() * self.size, self.stored.get_height() * self.size))
-        self.rect = self.image.get_rect(center=(self.start[0] - stage.XScroll, self.start[1] - stage.YScroll))
+        self.rect = self.image.get_rect(center=(self.start[0] - Stage.XScroll, self.start[1] - Stage.YScroll))
         if self.size <= 1:
             self.size += 0.1
         else:

@@ -24,7 +24,7 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
         self.stored = pygame.image.load(f'Assets/Planets/{costume_num}.png').convert_alpha()
         self.image = self.stored
         self.mask = pygame.mask.from_surface(self.image)
-        self.rect = self.image.get_rect(center=(x - stage.XScroll, y - stage.YScroll))
+        self.rect = self.image.get_rect(center=(x - Stage.XScroll, y - Stage.YScroll))
 
         # Set values
         self.start = pygame.math.Vector2((x, y))
@@ -67,11 +67,11 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
             self.start += self.force
 
             if play.Current_Planet == self:
-                stage.change_scroll(self.force)
+                Stage.change_scroll(self.force)
         elif 'Asteroid' in self.status:
             self.start += self.force
             if play.Current_Planet == self:
-                stage.change_scroll(self.force)
+                Stage.change_scroll(self.force)
         if 'Loot' in self.status:
             if play.Current_Planet == self:
                 if self.loot not in play.inventory:
@@ -81,7 +81,7 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
         self.image = pygame.transform.scale(self.stored, (self.size, self.size))
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.x, self.rect.y = (
-            self.start[0] - stage.XScroll, self.start[1] - stage.YScroll)
+            self.start[0] - Stage.XScroll, self.start[1] - Stage.YScroll)
 
         if self.chart:
             for probe in space_probe_group.sprites():
@@ -97,7 +97,7 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
         if self.should_kill:
             self.kill_in -= 1
             if self.kill_in <= 0:
-                effect_group.add(Explosion((stage.XScroll + self.rect.centerx, stage.YScroll + self.rect.centery)))
+                effect_group.add(Explosion((Stage.XScroll + self.rect.centerx, Stage.YScroll + self.rect.centery)))
                 play.Current_Planet = None
                 map_selector.target = None
                 if 'Asteroid' in self.status:

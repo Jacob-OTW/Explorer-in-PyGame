@@ -4,31 +4,31 @@ from player_obj import play
 
 class Stars:  # This class is used for the background tiles
     StarList = []  # Objects are added to this list
-    test_img = pygame.transform.scale(pygame.image.load(f'Assets/BG/BG{random.randint(1, 3)}.png').convert_alpha(), (stage.SCREEN_WIDTH, stage.SCREEN_HEIGHT))
+    test_img = pygame.transform.scale(pygame.image.load(f'Assets/BG/BG{random.randint(1, 3)}.png').convert_alpha(), (Stage.SCREEN_WIDTH, Stage.SCREEN_HEIGHT))
 
     @classmethod
     def randomBG(cls):
         # Returns one of the random images for the Background
-        return pygame.transform.scale(pygame.image.load(f'Assets/BG/BG{random.randint(1, 3)}.png').convert_alpha(), (stage.SCREEN_WIDTH, stage.SCREEN_HEIGHT))
+        return pygame.transform.scale(pygame.image.load(f'Assets/BG/BG{random.randint(1, 3)}.png').convert_alpha(), (Stage.SCREEN_WIDTH, Stage.SCREEN_HEIGHT))
 
     @classmethod
     def draw(cls):
         # This will move all the backgrounds and draw them
         for star in cls.StarList:
             star.move()
-            stage.screen.blit(star.img, star.position)
+            Stage.screen.blit(star.img, star.position)
 
     @classmethod
     def addstars(cls):
         # This will create and 4 objects with the correct starting points for a flawless background
-        for u in [(stage.SCREEN_WIDTH / 2 - cls.test_img.get_width() / 2,
-                   stage.SCREEN_HEIGHT / 2 - cls.test_img.get_height() / 2),
-                  (stage.SCREEN_WIDTH / 2 - cls.test_img.get_width() * 1.5,
-                   stage.SCREEN_HEIGHT / 2 - cls.test_img.get_height() / 2),
-                  (stage.SCREEN_WIDTH / 2 - cls.test_img.get_width() / 2,
-                   stage.SCREEN_HEIGHT / 2 - cls.test_img.get_height() * 1.5),
-                  (stage.SCREEN_WIDTH / 2 - cls.test_img.get_width() * 1.5,
-                   stage.SCREEN_HEIGHT / 2 - cls.test_img.get_height() * 1.5)]:
+        for u in [(Stage.SCREEN_WIDTH / 2 - cls.test_img.get_width() / 2,
+                   Stage.SCREEN_HEIGHT / 2 - cls.test_img.get_height() / 2),
+                  (Stage.SCREEN_WIDTH / 2 - cls.test_img.get_width() * 1.5,
+                   Stage.SCREEN_HEIGHT / 2 - cls.test_img.get_height() / 2),
+                  (Stage.SCREEN_WIDTH / 2 - cls.test_img.get_width() / 2,
+                   Stage.SCREEN_HEIGHT / 2 - cls.test_img.get_height() * 1.5),
+                  (Stage.SCREEN_WIDTH / 2 - cls.test_img.get_width() * 1.5,
+                   Stage.SCREEN_HEIGHT / 2 - cls.test_img.get_height() * 1.5)]:
             cls.StarList.append(Stars(u[0], u[1]))
 
     def __init__(self, x, y):
@@ -38,17 +38,17 @@ class Stars:  # This class is used for the background tiles
     def move(self):
         x, y = self.position - play.force
         c = False  # c is a trigger to tell if a new image is needed
-        if x < 0 - stage.SCREEN_WIDTH:
+        if x < 0 - Stage.SCREEN_WIDTH:
             x = x + Stars.test_img.get_width() * 2
             c = True
-        elif x > stage.SCREEN_WIDTH:
-            x = 0 - stage.SCREEN_WIDTH
+        elif x > Stage.SCREEN_WIDTH:
+            x = 0 - Stage.SCREEN_WIDTH
             c = True
-        if y < 0 - stage.SCREEN_HEIGHT:
-            y = stage.SCREEN_HEIGHT
+        if y < 0 - Stage.SCREEN_HEIGHT:
+            y = Stage.SCREEN_HEIGHT
             c = True
-        elif y > stage.SCREEN_HEIGHT:
-            y = 0 - stage.SCREEN_HEIGHT
+        elif y > Stage.SCREEN_HEIGHT:
+            y = 0 - Stage.SCREEN_HEIGHT
             c = True
         if c:
             self.img = Stars.randomBG()

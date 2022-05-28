@@ -1,5 +1,5 @@
 import pygame
-from settings import stage
+from settings import *
 from player_obj import play
 from pop_up_obj import add_pop_up
 from nav_objs import map_selector
@@ -79,7 +79,7 @@ class Shop_UI(pygame.sprite.Sprite):
         super().__init__()
         self.max_shop_length = 7  # Max amount of fields (n+1)
         self.image = pygame.image.load('Assets/shop_ui.png').convert_alpha()
-        self.rect = self.image.get_rect(right=stage.SCREEN_WIDTH, top=0)  # Align Surface at top-right corner
+        self.rect = self.image.get_rect(right=Stage.SCREEN_WIDTH, top=0)  # Align Surface at top-right corner
         self.shop_list = return_main_menu()  # Set the menu to main options
         self.font = pygame.font.SysFont("bahnschrift", 34)  # setup font for text
         self.test_text = self.font.render('test text', True, (255, 255, 255))  # Used for text sizes

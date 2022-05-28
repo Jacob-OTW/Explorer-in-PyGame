@@ -55,7 +55,7 @@ class MouseTrail:  # This class is for debugging
     def check(self):
         if pygame.mouse.get_pressed(3)[0]:
             temp = pygame.mouse.get_pos()
-            self.add_at(temp[0] + stage.XScroll, temp[1] + stage.YScroll)
+            self.add_at(temp[0] + Stage.XScroll, temp[1] + Stage.YScroll)
         elif pygame.mouse.get_pressed(3)[2]:
             self.positions = []
 
@@ -64,7 +64,7 @@ class MouseTrail:  # This class is for debugging
 
     def draw(self):
         for pos in self.positions:
-            stage.screen.blit(self.img, (pos[0] - stage.XScroll, pos[1] - stage.YScroll))
+            Stage.screen.blit(self.img, (pos[0] - Stage.XScroll, pos[1] - Stage.YScroll))
 
 
 MT = MouseTrail()  # Create Mouse trail object for debugging
@@ -102,34 +102,34 @@ while True:
     effect_group.update()
 
     # Visual
-    stage.screen.fill('black')  # Fill the 'screen' surface with a solid color
+    Stage.screen.fill('black')  # Fill the 'screen' surface with a solid color
     Stars.draw()  # Draw the Stars and update their position
-    space_probe_group.draw(stage.screen)
-    planet_group.draw(stage.screen)  # Draw the planets
-    creature_group.draw(stage.screen)
-    missile_group.draw(stage.screen)
-    player_group.draw(stage.screen)
-    effect_group.draw(stage.screen)
+    space_probe_group.draw(Stage.screen)
+    planet_group.draw(Stage.screen)  # Draw the planets
+    creature_group.draw(Stage.screen)
+    missile_group.draw(Stage.screen)
+    player_group.draw(Stage.screen)
+    effect_group.draw(Stage.screen)
     if map_selector.target:
-        arrow_group.draw(stage.screen)
+        arrow_group.draw(Stage.screen)
     MT.draw()  # Draw all Saved positions
     # play.draw_mask_attach()
     if shop_ui.shop:
-        shop_ui_group.draw(stage.screen)
+        shop_ui_group.draw(Stage.screen)
     if map_ui.map:
-        map_ui_group.draw(stage.screen)
+        map_ui_group.draw(Stage.screen)
         if map_selector.target:
-            map_selector_group.draw(stage.screen)
-        mimic_group.draw(stage.screen)
+            map_selector_group.draw(Stage.screen)
+        mimic_group.draw(Stage.screen)
     if 'Radar' in play.inventory:
-        radar_group.draw(stage.screen)
-        radar_ping_group.draw(stage.screen)
-    pop_up_group.draw(stage.screen)
+        radar_group.draw(Stage.screen)
+        radar_ping_group.draw(Stage.screen)
+    pop_up_group.draw(Stage.screen)
 
     # Text
     text = my_font.render(f"{round(frame_time * 1000)}ms :: {len(radar_ping_group.sprites())}", True, (255, 255, 0))
-    stage.screen.blit(text, (5, 10))
+    Stage.screen.blit(text, (5, 10))
 
     # Update
     pygame.display.flip()
-    stage.clock.tick(60)
+    Stage.clock.tick(60)

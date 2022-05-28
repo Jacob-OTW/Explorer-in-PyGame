@@ -10,7 +10,7 @@ from effects import effect_group, Explosion
 
 def add_missile():
     missile_group.add(
-        Missile((stage.XScroll + play.rect.centerx, stage.YScroll + play.rect.centery)))
+        Missile((Stage.XScroll + play.rect.centerx, Stage.YScroll + play.rect.centery)))
     mimic_group.add(Mimic(missile_group.sprites()[-1]))
 
 
@@ -31,7 +31,7 @@ class Missile(pygame.sprite.Sprite):
     def update(self):
         # Position
         self.image = pygame.transform.rotate(self.idle, self.angle)
-        self.rect = self.image.get_rect(center=(self.start[0] - stage.XScroll, self.start[1] - stage.YScroll))
+        self.rect = self.image.get_rect(center=(self.start[0] - Stage.XScroll, self.start[1] - Stage.YScroll))
 
         # Lifespan
         self.health -= 1
@@ -56,7 +56,7 @@ class Missile(pygame.sprite.Sprite):
                     play.Current_Planet = None
                     planet.reconstruct()
                     planet.kill()
-                effect_group.add(Explosion((stage.XScroll + self.rect.centerx, stage.YScroll + self.rect.centery)))
+                effect_group.add(Explosion((Stage.XScroll + self.rect.centerx, Stage.YScroll + self.rect.centery)))
                 self.kill()
 
 

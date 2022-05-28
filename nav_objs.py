@@ -13,16 +13,16 @@ class Mimic(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
     def update(self):
-        x = stage.XScroll + self.target.rect.centerx if self.player else self.target.start[0]
-        y = stage.YScroll + self.target.rect.centery if self.player else self.target.start[1]
+        x = Stage.XScroll + self.target.rect.centerx if self.player else self.target.start[0]
+        y = Stage.YScroll + self.target.rect.centery if self.player else self.target.start[1]
         if self.target.seen:
             self.image = pygame.transform.scale(self.target.image,
                                                 (self.target.rect.width / self.div, self.target.rect.height / self.div))
         else:
             self.image = pygame.Surface((self.target.rect.width / self.div, self.target.rect.height / self.div),
                                         pygame.SRCALPHA, 32)
-        self.rect = self.image.get_rect(center=((x * 0.018) + stage.SCREEN_WIDTH / 2,
-                                                (y * 0.018) + stage.SCREEN_HEIGHT / 2))
+        self.rect = self.image.get_rect(center=((x * 0.018) + Stage.SCREEN_WIDTH / 2,
+                                                (y * 0.018) + Stage.SCREEN_HEIGHT / 2))
 
         if not self.target.alive():
             self.kill()
@@ -109,7 +109,7 @@ class Map_UI(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.image = pygame.image.load('Assets/map_ui.png').convert_alpha()
-        self.rect = self.image.get_rect(center=(stage.SCREEN_WIDTH / 2, stage.SCREEN_HEIGHT / 2))
+        self.rect = self.image.get_rect(center=(Stage.SCREEN_WIDTH / 2, Stage.SCREEN_HEIGHT / 2))
         self.map = False
 
 

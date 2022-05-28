@@ -8,7 +8,7 @@ class Radar(pygame.sprite.Sprite):
         super().__init__()
         # Images
         self.image = pygame.Surface((200, 200), pygame.SRCALPHA, 32)
-        self.rect = self.image.get_rect(bottom=stage.SCREEN_HEIGHT, left=0)
+        self.rect = self.image.get_rect(bottom=Stage.SCREEN_HEIGHT, left=0)
         self.radar_screen = pygame.image.load('Assets/Radar/radar_screen.png').convert_alpha()
         self.radar_screen_rect = self.radar_screen.get_rect(center=(100, 100))
         self.radar_cursor = pygame.image.load('Assets/Radar/radar_cursor.png').convert_alpha()

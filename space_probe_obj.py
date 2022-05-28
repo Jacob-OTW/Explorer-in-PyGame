@@ -4,7 +4,7 @@ from nav_objs import mimic_group, Mimic
 
 
 def add_probe():
-    probe = Probe((stage.XScroll + stage.SCREEN_WIDTH / 2, stage.YScroll + stage.SCREEN_HEIGHT / 2), angle=play.angle,
+    probe = Probe((Stage.XScroll + Stage.SCREEN_WIDTH / 2, Stage.YScroll + Stage.SCREEN_HEIGHT / 2), angle=play.angle,
                   force=(play.XF, play.YF))
     space_probe_group.add(probe)
     mimic_group.add(Mimic(probe))
@@ -24,8 +24,8 @@ class Probe(pygame.sprite.Sprite):
     def update(self):
         self.start += self.force
         self.image = pygame.transform.rotate(self.stored, self.angle)
-        self.rect = self.image.get_rect(center=(self.start[0] - stage.XScroll, self.start[1] - stage.YScroll))
-        stage.loop(self)
+        self.rect = self.image.get_rect(center=(self.start[0] - Stage.XScroll, self.start[1] - Stage.YScroll))
+        Stage.loop(self)
 
 
 space_probe_group = pygame.sprite.GroupSingle()

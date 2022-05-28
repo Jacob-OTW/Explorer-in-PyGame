@@ -6,7 +6,7 @@ import time
 
 
 # This file exists so there isn't a circular import
-class stage:
+class Stage:
     pygame.init()
     SCREEN_WIDTH = 1600  # 960
     SCREEN_HEIGHT = 800  # 720
@@ -29,14 +29,14 @@ class stage:
 
 
 def loop(self):
-    if self.start[0] > stage.World_Size_X / 2:
-        self.start = ((stage.World_Size_X / 2) * -1, self.start[1])
-    elif self.start[0] < (stage.World_Size_X / 2 * -1):
-        self.start = (stage.World_Size_X / 2, self.start[1])
-    elif self.start[1] > stage.World_Size_Y / 2:
-        self.start = (self.start[0], (stage.World_Size_Y / 2) * -1)
-    elif self.start[1] < (stage.World_Size_Y / 2) * -1:
-        self.start = (self.start[0], stage.World_Size_Y / 2)
+    if self.start[0] > Stage.World_Size_X / 2:
+        self.start = ((Stage.World_Size_X / 2) * -1, self.start[1])
+    elif self.start[0] < (Stage.World_Size_X / 2 * -1):
+        self.start = (Stage.World_Size_X / 2, self.start[1])
+    elif self.start[1] > Stage.World_Size_Y / 2:
+        self.start = (self.start[0], (Stage.World_Size_Y / 2) * -1)
+    elif self.start[1] < (Stage.World_Size_Y / 2) * -1:
+        self.start = (self.start[0], Stage.World_Size_Y / 2)
 
 
 def split(a, n, r):  # Split a into n parts and return the r(th) value, used to spread workload over cycles

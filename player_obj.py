@@ -19,7 +19,7 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
 
         # Call Stored Image
         self.image = self.Surface
-        self.rect = self.image.get_rect(center=(stage.SCREEN_WIDTH / 2, stage.SCREEN_HEIGHT / 2))
+        self.rect = self.image.get_rect(center=(Stage.SCREEN_WIDTH / 2, Stage.SCREEN_HEIGHT / 2))
 
         # Forces
         self.force = pygame.math.Vector2((0, 0))
@@ -69,19 +69,19 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
 
         # Move game world if floating
         if not self.Current_Planet:
-            stage.change_scroll(self.force)
-            if stage.XScroll > 25000:
-                stage.XScroll = -25000
-            elif stage.XScroll < -25000:
-                stage.XScroll = 25000
-            elif stage.YScroll > 10000:
-                stage.YScroll = -10000
-            elif stage.YScroll < -10000:
-                stage.YScroll = 10000
+            Stage.change_scroll(self.force)
+            if Stage.XScroll > 25000:
+                Stage.XScroll = -25000
+            elif Stage.XScroll < -25000:
+                Stage.XScroll = 25000
+            elif Stage.YScroll > 10000:
+                Stage.YScroll = -10000
+            elif Stage.YScroll < -10000:
+                Stage.YScroll = 10000
 
         # Align all images and masks
         self.image = pygame.transform.rotate(self.Surface, self.angle)
-        self.rect = self.image.get_rect(center=(stage.SCREEN_WIDTH / 2, stage.SCREEN_HEIGHT / 2))
+        self.rect = self.image.get_rect(center=(Stage.SCREEN_WIDTH / 2, Stage.SCREEN_HEIGHT / 2))
         self.lander_img = pygame.transform.rotate(pygame.image.load('Assets/Lander.png').convert_alpha(), self.angle)
         self.mask = pygame.mask.from_surface(self.lander_img)
 
@@ -94,7 +94,7 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
         olist = self.mask.outline()
         img = pygame.Surface([640, 480], pygame.SRCALPHA, 32).convert_alpha()
         pygame.draw.lines(img, (200, 150, 150), True, olist)
-        stage.screen.blit(img, (self.rect.x, self.rect.y))
+        Stage.screen.blit(img, (self.rect.x, self.rect.y))
 
     def rotate(self, r):  # change the rotation value and render a new img
         self.angle += r

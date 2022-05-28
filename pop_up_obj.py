@@ -12,7 +12,7 @@ class PopUp(pygame.sprite.Sprite):  # Used to display actions
         super().__init__()
         self.font = pygame.font.SysFont("bahnschrift", 32)
         self.image = pygame.image.load('Assets/pop_up.png').convert_alpha()  # Create Surface
-        self.rect = self.image.get_rect(centerx=stage.SCREEN_WIDTH - 100, top=416 + 52 * pos_y)
+        self.rect = self.image.get_rect(centerx=Stage.SCREEN_WIDTH - 100, top=416 + 52 * pos_y)
         self.text = self.font.render(t, True, (255, 255, 255))  # Create assigned text
         self.text_rect = self.text.get_rect(center=(100, 25))  # Text_rect is used to place the text in the center
         self.image.blit(self.text, self.text_rect)  # Draw the text onto the Surface at the center
