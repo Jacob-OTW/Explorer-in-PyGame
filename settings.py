@@ -33,3 +33,9 @@ class stage:
             self.start = (self.start[0], (stage.World_Size_Y / 2) * -1)
         elif self.start[1] < (stage.World_Size_Y / 2) * -1:
             self.start = (self.start[0], stage.World_Size_Y / 2)
+
+    @classmethod
+    def split(cls, a, n, r):  # Split a into n parts and return the r(th) value, used to spread workload over cycles
+        k, m = divmod(len(a), n)
+        store = (a[i * k + min(i, m):(i + 1) * k + min(i + 1, m)] for i in range(n))
+        return list(store)[r]

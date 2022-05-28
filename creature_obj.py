@@ -6,6 +6,7 @@ from player_obj import play
 from space_probe_obj import space_probe_group
 from nav_objs import Mimic, mimic_group
 
+
 def dis_to(mp, tp):
     x = tp[0] - mp[0]
     y = tp[1] - mp[1]
@@ -19,7 +20,7 @@ class Creature(pygame.sprite.Sprite):
         self.animation_flow = True
         self.image = pygame.image.load(f'Assets/Creature/{self.animation_index}.png').convert_alpha()
         self.rect = self.image.get_rect()
-        self.start = pos
+        self.start = pygame.math.Vector2(pos)
         self.force = pygame.math.Vector2(0, 0)
         self.angle = 90
         self.timer = 0
@@ -35,7 +36,8 @@ class Creature(pygame.sprite.Sprite):
         self.image = pygame.transform.rotate(pygame.image.load(f'Assets/Creature/{round(self.animation_index)}.png'),
                                              self.angle - 90)
         self.rect = self.image.get_rect(center=(self.start[0] - stage.XScroll, self.start[1] - stage.YScroll))
-        if math.sqrt((self.rect.x - play.rect.x)**2 + (self.rect.y - play.rect.y)**2) < 200 and self.loot not in play.inventory:
+        if math.sqrt((self.rect.x - play.rect.x) ** 2 + (
+                self.rect.y - play.rect.y) ** 2) < 200 and self.loot not in play.inventory:
             play.inventory.append(self.loot)
 
         for probe in space_probe_group.sprites():
@@ -58,9 +60,8 @@ class Creature(pygame.sprite.Sprite):
                 self.angle += random.uniform(-20, 20)
 
     def accelerate(self):
-        convert = math.pi * 2 / 360
-        x = math.sin(self.angle * convert) * 3
-        y = math.cos(self.angle * convert) * 3
+        x = math.sin(math.radians(self.angle)) * 3
+        y = math.cos(math.radians(self.angle)) * 3
         self.force = pygame.math.Vector2(x, y)
 
 

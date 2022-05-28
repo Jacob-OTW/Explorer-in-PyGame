@@ -17,7 +17,7 @@ from effects import effect_group
 from key_binds import keybinds
 
 
-def HandleKeys():
+def handle_keys():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -56,7 +56,7 @@ class MouseTrail:  # This class is for debugging
         self.positions = []
         self.img = pygame.image.load('Assets/Heart.png').convert_alpha()
 
-    def Check(self):
+    def check(self):
         if pygame.mouse.get_pressed(3)[0]:
             temp = pygame.mouse.get_pos()
             self.add_at(temp[0] + stage.XScroll, temp[1] + stage.YScroll)
@@ -75,9 +75,11 @@ MT = MouseTrail()  # Create Mouse trail object for debugging
 
 Stars.addstars()  # Add the 4 background tiles
 
-myfont = pygame.font.SysFont("monospace", 16)  # setup font for text
+my_font = pygame.font.SysFont("monospace", 16)  # setup font for text
 
 mimic_group.add(Mimic(play, is_player=True))
+
+play.inventory.append('Radar')
 
 last_time = time.time()
 while True:
@@ -86,8 +88,8 @@ while True:
     last_time = time.time()
 
     # Events
-    HandleKeys()  # Check if game quit or Keys were pressed
-    MT.Check()  # Check if mouse button is down
+    handle_keys()  # Check if game quit or Keys were pressed
+    MT.check()  # Check if mouse button is down
     player_group.update()
     arrow_group.update()
     planet_group.update()
@@ -97,8 +99,9 @@ while True:
     pop_up_group.update()
     mimic_group.update()
     map_selector_group.update()
-    radar_group.update()
-    radar_ping_group.update()
+    if 'Radar' in play.inventory:
+        radar_group.update()
+        radar_ping_group.update()
     missile_group.update()
     effect_group.update()
 
@@ -128,7 +131,7 @@ while True:
     pop_up_group.draw(stage.screen)
 
     # Text
-    text = myfont.render(f"{round(frame_time * 1000)}ms", True, (255, 255, 0))
+    text = my_font.render(f"{round(frame_time * 1000)}ms", True, (255, 255, 0))
     stage.screen.blit(text, (5, 10))
 
     # Update

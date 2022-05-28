@@ -77,13 +77,12 @@ class Radar(pygame.sprite.Sprite):
 
         # Detect
         self.scan_timer += 1
-        if self.scan_timer % 5 == 0:
-            for planet in planet_group.sprites():
-                angle = round(round_dir(dir_to(play.rect.center, planet.rect.center)))
-                dis = dis_to(play.rect.center, planet.rect.center)
-                if semi_equal(angle, round_dir(self.cursor_angle + 90), 5) and dis < 2500:
-                    if len(radar_ping_group.sprites()) < 25:
-                        radar_ping_group.add(Radar_Ping(angle, dis, planet))
+        for planet in stage.split(planet_group.sprites(), 5, self.scan_timer % 5):  # Spread workload over 5 cycles.
+            angle = round(round_dir(dir_to(play.rect.center, planet.rect.center)))
+            dis = dis_to(play.rect.center, planet.rect.center)
+            if semi_equal(angle, round_dir(self.cursor_angle + 90), 5) and dis < 2500:
+                if len(radar_ping_group.sprites()) < 25:
+                    radar_ping_group.add(RadarPing(angle, dis, planet))
 
         # Update Image
         self.image = pygame.Surface((200, 200), pygame.SRCALPHA, 32)
@@ -92,13 +91,12 @@ class Radar(pygame.sprite.Sprite):
         self.image.blit(self.radar_cursor, self.radar_cursor_rect)
 
 
-class Radar_Ping(pygame.sprite.Sprite):
+class RadarPing(pygame.sprite.Sprite):
     def __init__(self, angle, dis, target):
         super().__init__()
         self.image = pygame.image.load('Assets/Radar/radar_ping.png').convert_alpha()
-        convert = 360 / (math.pi * 2)
-        x = math.cos((angle - 90) / convert) * (dis * (100 / 2500))
-        y = math.sin((angle - 90) / convert) * (dis * (100 / 2500))
+        x = math.sin(math.radians(angle)) * (dis * (100 / 2500))
+        y = math.cos(math.radians(angle)) * (dis * (100 / 2500)) * -1
         self.rect = self.image.get_rect(center=(
             radar.rect.centerx + x,
             radar.rect.centery - y))

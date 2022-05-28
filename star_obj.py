@@ -34,12 +34,11 @@ class Stars:  # This class is used for the background tiles
             cls.StarList.append(Stars(u[0], u[1]))
 
     def __init__(self, x, y):
-        self.position = (x, y)
+        self.position = pygame.math.Vector2((x, y))
         self.img = self.randomBG()
 
     def move(self):
-        x = self.position[0] - play.XF
-        y = self.position[1] - play.YF
+        x, y = self.position - play.force
         c = False  # c is a trigger to tell if a new image is needed
         if x < 0 - stage.SCREEN_WIDTH:
             x = x + Stars.test_img.get_width() * 2

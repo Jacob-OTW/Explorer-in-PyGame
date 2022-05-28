@@ -33,9 +33,8 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
         self.rect = self.image.get_rect(center=(x - stage.XScroll, y - stage.YScroll))
 
         # Set values
-        self.start = (x, y)
-        self.XF = force[0]
-        self.YF = force[1]
+        self.start = pygame.math.Vector2((x, y))
+        self.force = pygame.math.Vector2(force)
         self.status = status
         self.size = size
         self.orbit_speed = orbit_speed
@@ -68,19 +67,16 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
         if 'Static' in self.status:  # Things to do if Static
             pass
         if 'Moving' in self.status:  # Things to do if Moving
-            self.XF = math.cos(self.orbit_value) * self.orbit_speed
-            self.YF = math.sin(self.orbit_value) * self.orbit_speed
-
+            self.force = pygame.math.Vector2(math.cos(self.orbit_value) * self.orbit_speed, math.sin(self.orbit_value) * self.orbit_speed)
             self.orbit_value += self.mass * self.orbit_speed
-
-            self.start = (self.start[0] + self.XF, self.start[1] + self.YF)
+            self.start += self.force
 
             if play.Current_Planet == self:
-                stage.change_scroll((self.XF, self.YF))
+                stage.change_scroll(self.force)
         elif 'Asteroid' in self.status:
-            self.start = (self.start[0] + self.XF, self.start[1] + self.YF)
+            self.start += self.force
             if play.Current_Planet == self:
-                stage.change_scroll((self.XF, self.YF))
+                stage.change_scroll(self.force)
         if 'Loot' in self.status:
             if play.Current_Planet == self:
                 if self.loot not in play.inventory:

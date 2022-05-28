@@ -23,8 +23,7 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
         self.rect = self.image.get_rect(center=(stage.SCREEN_WIDTH / 2, stage.SCREEN_HEIGHT / 2))
 
         # Forces
-        self.XF = 0
-        self.YF = 0
+        self.force = pygame.math.Vector2((0, 0))
 
         # Masks
         self.lander_img = pygame.image.load('Assets/Lander.png').convert_alpha()
@@ -62,7 +61,7 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
         if self.Current_Planet:
             keyboard = pygame.key.get_pressed()
             if not keyboard[pygame.K_SPACE]:
-                self.XF, self.YF = self.Current_Planet.XF, self.Current_Planet.YF
+                self.force = pygame.math.Vector2(self.Current_Planet.force)
 
             # Set var to None if no longer touching the planet
             offset = (play.rect.x - self.Current_Planet.rect.x, play.rect.y - self.Current_Planet.rect.y)
@@ -71,7 +70,7 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
 
         # Move game world if floating
         if not self.Current_Planet:
-            stage.change_scroll((self.XF, self.YF))
+            stage.change_scroll(self.force)
             if stage.XScroll > 25000:
                 stage.XScroll = -25000
             elif stage.XScroll < -25000:
@@ -97,9 +96,9 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
         self.angle += r
 
     def accelerate(self):  # Convert is needed because math.sin and math.cos work in radian instead of degrees
-        convert = 360 / (2 * math.pi)
-        self.XF += math.cos(self.angle / convert) * 0.1
-        self.YF -= math.sin(self.angle / convert) * 0.1
+        x = math.cos(math.radians(self.angle)) * 0.1
+        y = math.sin(math.radians(self.angle)) * -0.1
+        self.force += pygame.math.Vector2((x, y))
         self.Current_Planet = None
 
 

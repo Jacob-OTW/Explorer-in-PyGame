@@ -2,7 +2,7 @@ import pygame
 import math
 from settings import stage
 from player_obj import play
-from planet_obj import planet_group, Planet
+from planet_obj import planet_group
 from radar_obj import radar
 from nav_objs import Mimic, mimic_group
 from effects import effect_group, Explosion

@@ -5,10 +5,10 @@ from settings import stage
 def add_pop_up(*args: str):  # Creates pop-ups
     if args:
         for i, arg in enumerate(args):
-            pop_up_group.add(Pop_Up(arg, i))
+            pop_up_group.add(PopUp(arg, i))
 
 
-class Pop_Up(pygame.sprite.Sprite):
+class PopUp(pygame.sprite.Sprite):  # Used to display actions
     def __init__(self, t: str, pos_y=0):
         super().__init__()
         self.font = pygame.font.SysFont("bahnschrift", 32)
