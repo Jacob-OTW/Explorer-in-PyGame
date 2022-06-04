@@ -80,9 +80,10 @@ def dis_to(mp, tp):
 
 
 def overlaps_with(self, group: pygame.sprite.Group):
-    col = pygame.sprite.spritecollide(self, group, False)
-    overlapping = []
-    for obj in col:
-        if self.mask.overlap(obj.mask, (obj.rect.x - self.rect.x, obj.rect.y - self.rect.y)):
-            overlapping.append(obj)
-    return overlapping
+    """
+    The listed passed into the filter call checks rect collisions, then, only the objects
+    that are also mask colliding will be keep, the final result will be returned
+    """
+    return list(filter(lambda obj: self.mask.overlap(obj.mask,
+                                                     (obj.rect.x - self.rect.x, obj.rect.y - self.rect.y)),
+                       pygame.sprite.spritecollide(self, group, False)))

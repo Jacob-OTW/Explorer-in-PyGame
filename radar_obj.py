@@ -40,22 +40,14 @@ class Radar(pygame.sprite.Sprite):
         if self.cursor_angle > 360:
             self.cursor_angle = 0
 
-        # Detect planets and create radar ping
+        # Detect planets and create radar ping. Will spread workload over x many cycles.
         self.scan_timer += 1
-        for planet in split(planet_group.sprites(), 5, self.scan_timer % 5):  # Spread workload over 5 cycles.
+        cycle_amount = 15
+        for planet in split(planet_group.sprites(), cycle_amount, self.scan_timer % cycle_amount):
             angle = round(round_dir(dir_to(play.rect.center, planet.rect.center)))
             dis = dis_to(play.rect.center, planet.rect.center)
-            if semi_equal(angle, round_dir(self.cursor_angle + 90), 5) and dis < 2500:
-                if len(radar_ping_group.sprites()) < 25:
-                    radar_ping_group.add(RadarPing(angle, dis, planet))
-        """
-        Notes for future lambda call:
-        1. do something to each planet that is in the current cycle
-        2. calculate the angle to the planet
-        3. calculate the distance to the planet
-        4. if the angle matches within 5° and the distance is smaller than 2500 it
-         will add the ping if the list isn't longer than 25, add a radar ping at the angle and distance
-        """
+            if semi_equal(angle, round_dir(self.cursor_angle + 90), cycle_amount) and dis < 2500:
+                radar_ping_group.add(RadarPing(angle, dis, planet))
         # Update Image
         self.image = pygame.Surface((200, 200), pygame.SRCALPHA, 32)
         self.image.blit(self.radar_screen, self.radar_screen_rect)
