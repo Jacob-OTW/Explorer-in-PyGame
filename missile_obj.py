@@ -1,5 +1,3 @@
-import pygame
-import math
 from settings import *
 from player_obj import play
 from planet_obj import planet_group
@@ -22,11 +20,23 @@ class Missile(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
         self.start = start
-        self.angle = 0
+        self.angle = play.angle
         self.health = 1200
         self.target = radar.lock
         self.seen = True
         self.speed = 15
+
+    def predicted_los(self, target, r=0):
+        if target:
+            t = dis_to(self.rect.center, self.predicted_los(target, r=r + 1) if r <= 2 else target.rect.center) / self.speed
+            return target.rect.centerx + (target.force[0] * int(t)), target.rect.centery + (
+                    -target.force[1] * int(t))
+        else:
+            return 0
+
+    def face_to(self, vector_pos):
+        angle = dir_to(self.rect.center, vector_pos) - 90
+        self.angle += math.sin(math.radians(angle - self.angle)) * 2.5
 
     def update(self):
         # Position
@@ -39,25 +49,17 @@ class Missile(pygame.sprite.Sprite):
             self.kill()
 
         # Tracking
-        convert = 360 / (math.pi * 2)
-        if self.target:
-            x = self.target.rect.centerx + ((dis_to(self.rect.center, self.target.rect.center) / self.speed) * self.target.XF)
-            y = self.target.rect.centery + ((dis_to(self.rect.center, self.target.rect.center) / self.speed) * self.target.YF)
-            predict = (x, y)
-            self.angle = dir_to(self.rect.center, predict) - 90
-        self.start = (
-            self.start[0] + (math.cos(self.angle / convert) * self.speed), self.start[1] - math.sin(self.angle / convert) * self.speed)
+        if self.target is not None:
+            self.face_to(self.predicted_los(self.target))
+        v = pygame.math.Vector2((self.speed, 0)).rotate(self.angle)
+        self.start = pygame.math.Vector2((self.start[0] + v[0], self.start[1] - v[1]))
 
         # Collision
-        for planet in planet_group.sprites():
-            offset = (planet.rect.x - self.rect.x, planet.rect.y - self.rect.y)
-            if self.mask.overlap(planet.mask, offset):
-                if 'Asteroid' in planet.status:
-                    play.Current_Planet = None
-                    planet.reconstruct()
-                    planet.kill()
-                effect_group.add(Explosion((Stage.XScroll + self.rect.centerx, Stage.YScroll + self.rect.centery)))
-                self.kill()
+        for planet in overlaps_with(self, planet_group):
+            if 'Asteroid' in planet.status:
+                planet.reconstruct()
+            effect_group.add(Explosion((Stage.XScroll + self.rect.centerx, Stage.YScroll + self.rect.centery)))
+            self.kill()
 
 
 missile_group = pygame.sprite.Group()

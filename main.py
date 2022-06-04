@@ -73,7 +73,7 @@ Stars.addstars()  # Add the 4 background tiles
 
 my_font = pygame.font.SysFont("monospace", 16)  # setup font for text
 
-mimic_group.add(Mimic(play, is_player=True))
+mimic_group.add(Mimic(play))
 
 play.inventory.append('Radar')
 
@@ -85,8 +85,8 @@ while True:
 
     # Events
     handle_keys()  # Check if game quit or Keys were pressed
-    MT.check()  # Check if mouse button is down
-    player_group.update(planet_group)
+    MT.check()  # Check if mouse button is down and draw hearts
+    player_group.update(planet_group)  # planet_group is passed as an argument because it can't import it (circle)
     arrow_group.update()
     planet_group.update()
     creature_group.update()
@@ -127,7 +127,7 @@ while True:
     pop_up_group.draw(Stage.screen)
 
     # Text
-    text = my_font.render(f"{round(frame_time * 1000)}ms :: {len(radar_ping_group.sprites())}", True, (255, 255, 0))
+    text = my_font.render(f"{round(frame_time * 1000)}ms", True, (255, 255, 0))
     Stage.screen.blit(text, (5, 10))
 
     # Update

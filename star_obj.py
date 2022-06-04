@@ -4,12 +4,14 @@ from player_obj import play
 
 class Stars:  # This class is used for the background tiles
     StarList = []  # Objects are added to this list
-    test_img = pygame.transform.scale(pygame.image.load(f'Assets/BG/BG{random.randint(1, 3)}.png').convert_alpha(), (Stage.SCREEN_WIDTH, Stage.SCREEN_HEIGHT))
+    test_img = pygame.transform.scale(pygame.image.load(f'Assets/BG/BG{random.randint(1, 3)}.png').convert_alpha(),
+                                      (Stage.SCREEN_WIDTH, Stage.SCREEN_HEIGHT))
 
     @classmethod
-    def randomBG(cls):
+    def random_bg(cls):
         # Returns one of the random images for the Background
-        return pygame.transform.scale(pygame.image.load(f'Assets/BG/BG{random.randint(1, 3)}.png').convert_alpha(), (Stage.SCREEN_WIDTH, Stage.SCREEN_HEIGHT))
+        return pygame.transform.scale(pygame.image.load(f'Assets/BG/BG{random.randint(1, 3)}.png').convert_alpha(),
+                                      (Stage.SCREEN_WIDTH, Stage.SCREEN_HEIGHT))
 
     @classmethod
     def draw(cls):
@@ -33,7 +35,7 @@ class Stars:  # This class is used for the background tiles
 
     def __init__(self, x, y):
         self.position = pygame.math.Vector2((x, y))
-        self.img = self.randomBG()
+        self.img = self.random_bg()
 
     def move(self):
         x, y = self.position - play.force
@@ -51,6 +53,6 @@ class Stars:  # This class is used for the background tiles
             y = 0 - Stage.SCREEN_HEIGHT
             c = True
         if c:
-            self.img = Stars.randomBG()
+            self.img = Stars.random_bg()
 
         self.position = (x, y)

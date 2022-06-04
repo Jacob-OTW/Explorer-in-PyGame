@@ -1,6 +1,3 @@
-import pygame
-import math
-import random
 from settings import *
 from player_obj import play
 from space_probe_obj import space_probe_group
@@ -34,9 +31,9 @@ class Creature(pygame.sprite.Sprite):
                 self.rect.y - play.rect.y) ** 2) < 200 and self.loot not in play.inventory:
             play.inventory.append(self.loot)
 
-        for probe in space_probe_group.sprites():
-            if dis_to(self.rect.center, probe.rect.center) < 2000:
-                self.seen = True
+        self.seen = bool(list(filter(
+            lambda probe: dis_to(self.rect.center, probe.rect.center) < 2000, space_probe_group.sprites()
+        )))
 
     def cycle_animation(self):
         speed = 0.3

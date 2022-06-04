@@ -1,6 +1,3 @@
-import math
-import pygame
-import random
 from settings import *
 from player_obj import play
 from space_probe_obj import space_probe_group
@@ -56,6 +53,9 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
         y1 = random.randint(-8000, 8000)
         v = random.uniform(-5, 5), random.uniform(-5, 5)
         planet_group.add(Planet(x1, y1, force=v, costume_num='asteroid', status=['Asteroid', 'Loot'], loot=self.loot))
+        if play.Current_Planet == self:
+            play.Current_Planet = None
+        self.kill()
 
     def update(self):
         if 'Static' in self.status:  # Things to do if Static

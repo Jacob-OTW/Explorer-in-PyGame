@@ -1,13 +1,13 @@
 from settings import *
-from player_obj import play
+from player_obj import play, Player
 
 
 class Mimic(pygame.sprite.Sprite):
-    def __init__(self, target, is_player=False):
+    def __init__(self, target):
         super().__init__()
-        self.player = is_player
+        self.player = True if type(target) == Player else False
         self.target = target
-        self.div = 5 if self.player else 10
+        self.div = 5 if self.player else 10  # If the player was drawn at that size, it would be too small
         self.image = pygame.transform.scale(self.target.image,
                                             (self.target.rect.width / self.div, self.target.rect.height / self.div))
         self.rect = self.image.get_rect()
@@ -35,7 +35,7 @@ class Arrow(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.stored = pygame.image.load('Assets/arrow.png').convert_alpha()
-        self.image = self.stored
+        self.image = pygame.transform.rotozoom(self.stored, 0, 1.0)
         self.rect = self.image.get_rect()
         self.angle = 0
 
@@ -47,65 +47,61 @@ class Arrow(pygame.sprite.Sprite):
             self.angle = dir_to(self.rect.center, map_selector.target.target.rect.center)
 
 
-arrow_group = pygame.sprite.GroupSingle()
 arrow = Arrow()
-arrow_group.add(arrow)
+arrow_group = pygame.sprite.GroupSingle(arrow)
 
 
-class Map_Selector(pygame.sprite.Sprite):
+class MapSelector(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.image = pygame.Surface((20, 20))
-        self.image.fill('Blue')
+        self.image.fill('Green')
         self.rect = self.image.get_rect()
         self.target = None
-        self.target_index = 1  # Starts with 1 because 0 is the ship
+        self.target_index = 1  # Starts with 1 because 0 is the player
         self.possible = []
         for mimic in mimic_group.sprites():
-            if mimic.target.seen:
+            if Mimic(mimic).target.seen:
                 self.possible.append(mimic)
 
     def update(self):
         if self.target and not self.target.target.seen:
-            Map_Selector.next_target()
-        if self.possible and self.target:
+            self.next_target()
+        if self.possible and self.target is not None:  # There are possible options, and the local option is not None
             self.rect.center = self.target.rect.center
         if self.target and not self.target.alive():
             self.target = None
 
-    @classmethod
-    def next_target(cls):
+    def next_target(self):
         # Set possible to all mimic that are on the map
-        a = []
-        for i in mimic_group.sprites():
-            if i.target.seen and not i.player:
-                a.append(i)
-        map_selector.possible = a
+        possible = []
+        for mimic in mimic_group.sprites():
+            if Mimic(mimic).target.seen and not Mimic(mimic).player:
+                possible.append(mimic)
+        self.possible = possible
 
         # Set a target if not target is set.
-        if map_selector.target:
-            map_selector.target_index += 1
-            if map_selector.target_index > len(a) - 1:
-                map_selector.target_index = 0
-        if len(map_selector.possible) <= map_selector.target_index:
-            map_selector.target_index = len(map_selector.possible) - 1
-        map_selector.target = map_selector.possible[map_selector.target_index]
+        if self.target:
+            self.target_index += 1
+            if self.target_index > len(possible) - 1:
+                self.target_index = 0
+        if len(self.possible) <= self.target_index:
+            self.target_index = len(self.possible) - 1
+        self.target = self.possible[self.target_index]
 
-    @classmethod
-    def set_target(cls, obj):
+    def set_target(self, obj):
         a = obj.target
-        for i in mimic_group.sprites():
-            if i.target == a:
-                map_selector.possible.append(i)
-                map_selector.target = i
+        for mimic in mimic_group.sprites():
+            if Mimic(mimic).target == a:
+                self.possible.append(mimic)
+                self.target = mimic
 
 
-map_selector_group = pygame.sprite.GroupSingle()
-map_selector = Map_Selector()
-map_selector_group.add(map_selector)
+map_selector = MapSelector()
+map_selector_group = pygame.sprite.GroupSingle(map_selector)
 
 
-class Map_UI(pygame.sprite.Sprite):
+class MapUI(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.image = pygame.image.load('Assets/map_ui.png').convert_alpha()
@@ -113,6 +109,5 @@ class Map_UI(pygame.sprite.Sprite):
         self.map = False
 
 
-map_ui_group = pygame.sprite.Group()
-map_ui = Map_UI()
-map_ui_group.add(map_ui)
+map_ui = MapUI()
+map_ui_group = pygame.sprite.Group(map_ui)

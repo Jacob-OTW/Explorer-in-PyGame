@@ -39,7 +39,7 @@ def loop(self):
         self.start = (self.start[0], Stage.World_Size_Y / 2)
 
 
-def split(a, n, r):  # Split a into n parts and return the r(th) value, used to spread workload over cycles
+def split(a, n, r):  # Split "a" into n parts and return the r(th) value, used to spread workload over cycles
     k, m = divmod(len(a), n)
     store = (a[i * k + min(i, m):(i + 1) * k + min(i + 1, m)] for i in range(n))
     return list(store)[r]
@@ -77,3 +77,12 @@ def dis_to(mp, tp):
     x = tp[0] - mp[0]
     y = tp[1] - mp[1]
     return math.sqrt(x ** 2 + y ** 2)
+
+
+def overlaps_with(self, group: pygame.sprite.Group):
+    col = pygame.sprite.spritecollide(self, group, False)
+    overlapping = []
+    for obj in col:
+        if self.mask.overlap(obj.mask, (obj.rect.x - self.rect.x, obj.rect.y - self.rect.y)):
+            overlapping.append(obj)
+    return overlapping

@@ -1,4 +1,3 @@
-import pygame
 from settings import *
 from player_obj import play
 from pop_up_obj import add_pop_up
@@ -74,7 +73,7 @@ def return_settings():
     shop_ui.shop_list[shop_ui.max_shop_length] = 'Return'
 
 
-class Shop_UI(pygame.sprite.Sprite):
+class ShopUI(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         self.max_shop_length = 7  # Max amount of fields (n+1)
@@ -212,5 +211,5 @@ class Shop_UI(pygame.sprite.Sprite):
 
 
 shop_ui_group = pygame.sprite.GroupSingle()
-shop_ui = Shop_UI()
+shop_ui = ShopUI()
 shop_ui_group.add(shop_ui)

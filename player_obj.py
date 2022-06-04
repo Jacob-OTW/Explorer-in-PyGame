@@ -85,7 +85,7 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
         self.lander_img = pygame.transform.rotate(pygame.image.load('Assets/Lander.png').convert_alpha(), self.angle)
         self.mask = pygame.mask.from_surface(self.lander_img)
 
-        for obj in self.overlaps_with(planet_group):
+        for obj in overlaps_with(self, pygame.sprite.Group(planet_group)):
             keys = pygame.key.get_pressed()
             if not keys[pygame.K_SPACE]:
                 self.Current_Planet = obj
@@ -98,14 +98,6 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
 
     def rotate(self, r):  # change the rotation value and render a new img
         self.angle += r
-
-    def overlaps_with(self, group: pygame.sprite.AbstractGroup):
-        col = pygame.sprite.spritecollide(self, group, False)
-        overlapping = []
-        for obj in col:
-            if self.mask.overlap(obj.mask, (obj.rect.x - self.rect.x, obj.rect.y - self.rect.y)):
-                overlapping.append(obj)
-        return overlapping
 
     def accelerate(self):  # Convert is needed because math.sin and math.cos work in radian instead of degrees
         x = math.cos(math.radians(self.angle)) * 0.1
