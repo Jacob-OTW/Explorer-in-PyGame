@@ -34,6 +34,9 @@ class Creature(pygame.sprite.Sprite):
         self.seen = bool(list(filter(
             lambda probe: dis_to(self.rect.center, probe.rect.center) < 2000, space_probe_group.sprites()
         )))
+        """
+        it will only keep the probe object if the lambda function which checks if each element is closer than 2000. If the list it adds to not empty, the creature was seen
+        """
 
     def cycle_animation(self):
         speed = 0.3

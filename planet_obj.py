@@ -84,9 +84,14 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
             self.start[0] - Stage.XScroll, self.start[1] - Stage.YScroll)
 
         if self.chart:
-            for probe in space_probe_group.sprites():
-                if dis_to(self.rect.center, probe.rect.center) < 2000:
-                    self.seen_by_probe = True
+            self.seen = bool(list(filter(
+                lambda probe: dis_to(self.rect.center, probe.rect.center) < 2000, space_probe_group.sprites()
+            )))
+            """
+            it will only keep the probe object if the lambda function which checks if 
+            each element is closer than 2000. If the list it adds to not empty, the creature was seen
+            """
+
             if self.chart in play.inventory or self.seen_by_probe:
                 self.seen = True
             else:

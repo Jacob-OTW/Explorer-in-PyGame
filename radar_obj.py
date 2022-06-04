@@ -48,7 +48,14 @@ class Radar(pygame.sprite.Sprite):
             if semi_equal(angle, round_dir(self.cursor_angle + 90), 5) and dis < 2500:
                 if len(radar_ping_group.sprites()) < 25:
                     radar_ping_group.add(RadarPing(angle, dis, planet))
-
+        """
+        Notes for future lambda call:
+        1. do something to each planet that is in the current cycle
+        2. calculate the angle to the planet
+        3. calculate the distance to the planet
+        4. if the angle matches within 5° and the distance is smaller than 2500 it
+         will add the ping if the list isn't longer than 25, add a radar ping at the angle and distance
+        """
         # Update Image
         self.image = pygame.Surface((200, 200), pygame.SRCALPHA, 32)
         self.image.blit(self.radar_screen, self.radar_screen_rect)

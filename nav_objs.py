@@ -59,42 +59,38 @@ class MapSelector(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.target = None
         self.target_index = 1  # Starts with 1 because 0 is the player
-        self.possible = []
-        for mimic in mimic_group.sprites():
-            if Mimic(mimic).target.seen:
-                self.possible.append(mimic)
+        self.possible = list(filter(lambda mimic: mimic.target.seen is True, mimic_group.sprites()))
 
     def update(self):
-        if self.target and not self.target.target.seen:
+        if self.target is not None and not self.target.target.seen:
             self.next_target()
-        if self.possible and self.target is not None:  # There are possible options, and the local option is not None
-            self.rect.center = self.target.rect.center
-        if self.target and not self.target.alive():
+        if self.target is not None and not self.target.alive():
             self.target = None
+        if self.target is not None:  # There are possible options, and the local option is not None
+            self.rect.center = self.target.rect.center
 
     def next_target(self):
         # Set possible to all mimic that are on the map
-        possible = []
-        for mimic in mimic_group.sprites():
-            if Mimic(mimic).target.seen and not Mimic(mimic).player:
-                possible.append(mimic)
-        self.possible = possible
+        self.possible = list(filter(lambda mimic: mimic.target.seen and not mimic.player, mimic_group.sprites()))
+        """
+        it will only keep mimics that which were seen and are not the player
+        """
 
         # Set a target if not target is set.
         if self.target:
             self.target_index += 1
-            if self.target_index > len(possible) - 1:
+            if self.target_index > len(self.possible) - 1:
                 self.target_index = 0
         if len(self.possible) <= self.target_index:
             self.target_index = len(self.possible) - 1
         self.target = self.possible[self.target_index]
 
     def set_target(self, obj):
-        a = obj.target
-        for mimic in mimic_group.sprites():
-            if Mimic(mimic).target == a:
-                self.possible.append(mimic)
-                self.target = mimic
+        self.target = list(filter(lambda mimic: mimic.target == obj.target, mimic_group.sprites()))[0]
+        """
+        the target is set the the 0th element of the list that 
+        contains all the mimic that have obj.target as their target.
+        """
 
 
 map_selector = MapSelector()
