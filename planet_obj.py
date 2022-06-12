@@ -83,7 +83,7 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
                     play.inventory.append(self.loot)
         loop(self)
 
-        self.image = pygame.transform.rotozoom(self.stored, 0, self.size)
+        self.image = pygame.transform.scale(self.stored, (self.size, self.size))
         self.mask = pygame.mask.from_surface(self.image)
         self.rect.x, self.rect.y = (
             self.start[0] - Stage.XScroll, self.start[1] - Stage.YScroll)
