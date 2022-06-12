@@ -6,13 +6,13 @@ from nav_objs import Mimic, mimic_group
 from effects import effect_group, Explosion
 
 
-def add_missile():
-    missile_group.add(
-        Missile((Stage.XScroll + play.rect.centerx, Stage.YScroll + play.rect.centery)))
-    mimic_group.add(Mimic(missile_group.sprites()[-1]))
-
-
 class Missile(pygame.sprite.Sprite):
+    @classmethod
+    def add_missile(cls):
+        missile_group.add(
+            Missile((Stage.XScroll + play.rect.centerx, Stage.YScroll + play.rect.centery)))
+        mimic_group.add(Mimic(missile_group.sprites()[-1]))
+
     def __init__(self, start):
         super().__init__()
         self.idle = pygame.transform.scale(pygame.image.load('Assets/Missile/idle.png').convert_alpha(), (80, 80))
@@ -28,7 +28,8 @@ class Missile(pygame.sprite.Sprite):
 
     def predicted_los(self, target, r=0):
         if target:
-            t = dis_to(self.rect.center, self.predicted_los(target, r=r + 1) if r <= 2 else target.rect.center) / self.speed
+            t = dis_to(self.rect.center,
+                       self.predicted_los(target, r=r + 1) if r <= 2 else target.rect.center) / self.speed
             return target.rect.centerx + (target.force[0] * int(t)), target.rect.centery + (
                     -target.force[1] * int(t))
         else:
@@ -56,7 +57,7 @@ class Missile(pygame.sprite.Sprite):
 
         # Collision
         for planet in overlaps_with(self, planet_group):
-            if 'Asteroid' in planet.status:
+            if planet.asteroid:
                 planet.reconstruct()
             effect_group.add(Explosion((Stage.XScroll + self.rect.centerx, Stage.YScroll + self.rect.centery)))
             self.kill()

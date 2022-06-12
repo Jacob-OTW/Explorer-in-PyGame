@@ -10,8 +10,7 @@ def return_main_menu():  # Returns main menu options
     always_inv = ['Inventory', 'Settings', 'Exit']
     shop_inv = ['Buy', 'Sell', 'Refuel']
     emtpy_inv = ['', '', '']
-    return shop_inv + always_inv if play.Current_Planet and 'Shop' in play.Current_Planet.status\
-        else emtpy_inv + always_inv
+    return shop_inv + always_inv if play.Current_Planet and play.Current_Planet.shop else emtpy_inv + always_inv
 
 
 def return_inventory():  # Returns the inventory as shop list option
@@ -172,7 +171,7 @@ class ShopUI(pygame.sprite.Sprite):
                     case 'Clear Target':
                         map_selector.target = None
                         radar.lock = None
-            elif not play.Current_Planet or 'Shop' not in play.Current_Planet.status:
+            elif not play.Current_Planet or not play.Current_Planet.shop:
                 self.shop = False
                 self.shop_list = return_main_menu()
                 self.directory = []

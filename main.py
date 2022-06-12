@@ -8,7 +8,7 @@ from nav_objs import mimic_group, Mimic, map_selector_group, map_selector, map_u
 from star_obj import Stars
 from space_probe_obj import space_probe_group
 from radar_obj import radar_group, radar, radar_ping_group
-from missile_obj import missile_group, add_missile
+from missile_obj import missile_group, Missile
 from effects import effect_group
 from key_binds import keybinds
 
@@ -44,7 +44,7 @@ def handle_keys():
                     radar.lock = r.target
                     map_selector.set_target(r)
             if event.key == pygame.K_q:
-                add_missile()
+                Missile.add_missile()
 
 
 class MouseTrail:  # This class is for debugging

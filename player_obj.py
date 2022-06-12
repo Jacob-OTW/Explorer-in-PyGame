@@ -87,7 +87,7 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
 
         for obj in overlaps_with(self, pygame.sprite.Group(planet_group)):
             keys = pygame.key.get_pressed()
-            if not keys[pygame.K_SPACE]:
+            if not keys[pygame.K_SPACE] and self.Current_Planet != obj:
                 self.Current_Planet = obj
 
     def draw_mask_attach(self):  # Draws the hit_box at the bottom of player for debugging
