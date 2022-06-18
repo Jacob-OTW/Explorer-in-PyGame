@@ -3,6 +3,9 @@ from key_binds import keybinds
 
 
 class Player(pygame.sprite.Sprite):  # This class is used for the player
+    __slots__ = ('angle', 'Surface', 'Idle', 'burner', 'burner_index', 'burner_timer', 'image', 'rect', 'lander_img',
+                 'mask', 'force', 'Current_Planet', 'seen', 'inventory', 'money')
+
     def __init__(self):
         super().__init__()
         # Set angle
@@ -10,8 +13,7 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
 
         # Store Image
         self.Surface = pygame.Surface((90, 52), pygame.SRCALPHA, 32)
-        self.Idle = pygame.image.load('Assets/Ship.png').convert()
-        self.Idle.set_colorkey((0, 0, 0))
+        self.Idle = pygame.image.load('Assets/Ship.png').convert_alpha()
         self.burner = {0: pygame.image.load('Assets/burner0.png').convert_alpha(),
                        1: pygame.image.load('Assets/burner1.png').convert_alpha()}
         self.burner_index = 0
@@ -20,17 +22,14 @@ class Player(pygame.sprite.Sprite):  # This class is used for the player
         # Call Stored Image
         self.image = self.Surface
         self.rect = self.image.get_rect(center=(Stage.SCREEN_WIDTH / 2, Stage.SCREEN_HEIGHT / 2))
+        self.lander_img = pygame.image.load('Assets/Lander.png').convert_alpha()
+        self.mask = pygame.mask.from_surface(self.lander_img)
 
         # Forces
         self.force = pygame.math.Vector2((0, 0))
 
-        # Masks
-        self.lander_img = pygame.image.load('Assets/Lander.png').convert_alpha()
-        self.mask = pygame.mask.from_surface(self.lander_img)
-
         # Planet caching
         self.Current_Planet = None
-        self.offset = None
 
         # Mimic
         self.seen = True

@@ -105,7 +105,7 @@ while True:
     Stage.screen.fill('black')  # Fill the 'screen' surface with a solid color
     Stars.draw()  # Draw the Stars and update their position
     space_probe_group.draw(Stage.screen)
-    planet_group.draw(Stage.screen)  # Draw the planets
+    planet_group.draw(Stage.screen)
     creature_group.draw(Stage.screen)
     missile_group.draw(Stage.screen)
     player_group.draw(Stage.screen)

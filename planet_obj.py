@@ -8,7 +8,7 @@ from nav_objs import map_selector, Mimic, mimic_group
 
 
 class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kind
-    __slots__ = ('stored', 'image', 'mask', 'rect', 'start', 'force', 'size', 'orbit_speed', 'mass', 'loot', 'buying',
+    __slots__ = ('stored', 'image', 'mask', 'rect', 'start', 'force', 'orbit_speed', 'mass', 'loot', 'buying',
                  'selling', 'chart', 'seen_by_probe', 'seen', 'kill_in', 'should_kill', 'static', 'moving', 'asteroid',
                  'shop', 'orbit_value')
 
@@ -22,24 +22,23 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
 
         # init
         self.stored = pygame.image.load(f'Assets/Planets/{costume_num}.png').convert_alpha()
-        self.image = pygame.transform.rotozoom(self.stored, 0, 1.0)
+        self.image = pygame.transform.scale(self.stored, (size, size))
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect(center=(x - Stage.XScroll, y - Stage.YScroll))
 
         # Set values
-        self.start = pygame.math.Vector2((x, y))
-        self.force = pygame.math.Vector2(force)
-        self.size = size
-        self.orbit_speed = orbit_speed
-        self.mass = mass
-        self.loot = loot
-        self.buying = buying
-        self.selling = selling
-        self.chart = chart
-        self.seen_by_probe = False
-        self.seen = False if self.chart else True
-        self.kill_in = 300
-        self.should_kill = False
+        self.start = pygame.math.Vector2((x, y))  # The positions that is subtracted from the scroll value.
+        self.force = pygame.math.Vector2(force)  # The current movement of the planet as a 2d vector.
+        self.orbit_speed = orbit_speed  # Used to calculate the orbit of the planet
+        self.mass = mass  # Used to calculate the orbit of the planet
+        self.loot = loot  # The item that is given to the player when he lands, if None the play won't get anything.
+        self.buying = buying  # A dict where the items are keys and the value are the prices they can be bought for.
+        self.selling = selling  # A dict with items as keys and the values the price they can be sold for.
+        self.chart = chart  # The item that is required for the planet to be shown on map.
+        self.seen_by_probe = False  # A boolean that is switched when a probe is close enough.
+        self.seen = False if self.chart else True  # the overall boolean if the planet is shown on the mini map.
+        self.kill_in = 300  # An int that stores the ticks until the planet destroys itself, used for the C4 item.
+        self.should_kill = False  # A boolean if a C4 was placed on the planet.
 
         # Status values, a collection of booleans to influence behavior.
         self.static = static
@@ -48,7 +47,7 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
         self.shop = shop
 
         # std values
-        self.orbit_value = 0
+        self.orbit_value = 0  # The current position in relation to its orbit spot.
 
         # Mimic
         mimic_group.add(Mimic(self))
@@ -81,10 +80,8 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
             if play.Current_Planet == self:
                 if self.loot not in play.inventory:
                     play.inventory.append(self.loot)
-        loop(self)
+        loop(self)  # checks
 
-        self.image = pygame.transform.scale(self.stored, (self.size, self.size))
-        self.mask = pygame.mask.from_surface(self.image)
         self.rect.x, self.rect.y = (
             self.start[0] - Stage.XScroll, self.start[1] - Stage.YScroll)
 
@@ -93,8 +90,8 @@ class Planet(pygame.sprite.Sprite):  # This class is used for Planets of all kin
                 lambda probe: dis_to(self.rect.center, probe.rect.center) < 2000, space_probe_group.sprites()
             )))
             """
-            it will only keep the probe object if the lambda function which checks if 
-            each element is closer than 2000. If the list it adds to not empty, the creature was seen
+            It will only keep the probe object if the lambda function which checks if 
+            each probe is closer than 2000. If the list it adds to is not empty, the planet was seen
             """
 
             if self.chart in play.inventory or self.seen_by_probe:

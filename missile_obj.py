@@ -13,6 +13,8 @@ class Missile(pygame.sprite.Sprite):
             Missile((Stage.XScroll + play.rect.centerx, Stage.YScroll + play.rect.centery)))
         mimic_group.add(Mimic(missile_group.sprites()[-1]))
 
+    __slots__ = ('idle', 'image', 'rect', 'mask', 'start', 'angle', 'health', 'target', 'seen', 'speed')
+
     def __init__(self, start):
         super().__init__()
         self.idle = pygame.transform.scale(pygame.image.load('Assets/Missile/idle.png').convert_alpha(), (80, 80))
@@ -27,13 +29,12 @@ class Missile(pygame.sprite.Sprite):
         self.speed = 15
 
     def predicted_los(self, target, r=0):
-        if target:
-            t = dis_to(self.rect.center,
-                       self.predicted_los(target, r=r + 1) if r <= 2 else target.rect.center) / self.speed
-            return target.rect.centerx + (target.force[0] * int(t)), target.rect.centery + (
-                    -target.force[1] * int(t))
-        else:
+        if not target:
             return 0
+        t = dis_to(self.rect.center,
+                   self.predicted_los(target, r=r + 1) if r <= 2 else target.rect.center) / self.speed
+        return target.rect.centerx + (target.force[0] * int(t)), target.rect.centery + (
+                -target.force[1] * int(t))
 
     def face_to(self, vector_pos):
         angle = dir_to(self.rect.center, vector_pos) - 90

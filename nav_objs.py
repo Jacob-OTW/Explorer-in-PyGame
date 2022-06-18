@@ -2,7 +2,10 @@ from settings import *
 from player_obj import play, Player
 
 
-class Mimic(pygame.sprite.Sprite):
+class Mimic(pygame.sprite.Sprite):  # A class for the objects that mimic the real objects, used for the mini map.
+    __slots__ = ('player', 'target', 'div', 'image', 'rect')
+    icon_size = 1.5
+
     def __init__(self, target):
         super().__init__()
         self.player = True if type(target) == Player else False
@@ -17,7 +20,8 @@ class Mimic(pygame.sprite.Sprite):
         y = Stage.YScroll + self.target.rect.centery if self.player else self.target.start[1]
         if self.target.seen:
             self.image = pygame.transform.scale(self.target.image,
-                                                (self.target.rect.width / self.div, self.target.rect.height / self.div))
+                                                (self.target.rect.width * Mimic.icon_size / self.div,
+                                                 self.target.rect.height * Mimic.icon_size / self.div))
         else:
             self.image = pygame.Surface((self.target.rect.width / self.div, self.target.rect.height / self.div),
                                         pygame.SRCALPHA, 32)
@@ -31,7 +35,9 @@ class Mimic(pygame.sprite.Sprite):
 mimic_group = pygame.sprite.Group()
 
 
-class Arrow(pygame.sprite.Sprite):
+class Arrow(pygame.sprite.Sprite):  # A class for the arrow that points the player to selected targets.
+    __slots__ = ('stored', 'image', 'rect', 'angle')
+
     def __init__(self):
         super().__init__()
         self.stored = pygame.image.load('Assets/arrow.png').convert_alpha()
@@ -51,7 +57,9 @@ arrow = Arrow()
 arrow_group = pygame.sprite.GroupSingle(arrow)
 
 
-class MapSelector(pygame.sprite.Sprite):
+class MapSelector(pygame.sprite.Sprite):  # The green box that shows behind selected planets.
+    __slots__ = ('image', 'rect', 'target', 'target_index', 'possible')
+
     def __init__(self):
         super().__init__()
         self.image = pygame.Surface((20, 20))
@@ -97,7 +105,9 @@ map_selector = MapSelector()
 map_selector_group = pygame.sprite.GroupSingle(map_selector)
 
 
-class MapUI(pygame.sprite.Sprite):
+class MapUI(pygame.sprite.Sprite):  # The gray box that is the map.
+    __slots__ = ('image', 'rect', 'map')
+
     def __init__(self):
         super().__init__()
         self.image = pygame.image.load('Assets/map_ui.png').convert_alpha()

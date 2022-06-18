@@ -2,6 +2,8 @@ from settings import *
 
 
 class Explosion(pygame.sprite.Sprite):
+    __slots__ = ('stored', 'size', 'start', 'image', 'rect', 'opacity')
+
     def __init__(self, pos):
         super().__init__()
         self.stored = pygame.image.load('Assets/explosion.png').convert_alpha()

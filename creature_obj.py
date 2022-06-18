@@ -5,6 +5,9 @@ from nav_objs import Mimic, mimic_group
 
 
 class Creature(pygame.sprite.Sprite):
+    __slots__ = ('animation_index', 'animation_flow', 'image',
+                 'rect', 'start', 'force', 'angle', 'timer', 'loot', 'seen')
+
     def __init__(self, pos=(800, 800)):
         super().__init__()
         self.animation_index = 0
@@ -35,7 +38,9 @@ class Creature(pygame.sprite.Sprite):
             lambda probe: dis_to(self.rect.center, probe.rect.center) < 2000, space_probe_group.sprites()
         )))
         """
-        it will only keep the probe object if the lambda function which checks if each element is closer than 2000. If the list it adds to not empty, the creature was seen
+        1. Go through all the elements.
+        2. Only keep the elements where the rect is within 2000px.
+        3. if the list is emtpy, seen is False, else its True.
         """
 
     def cycle_animation(self):
